@@ -7,4 +7,6 @@ Andromeda Sawtelle - andromeda.sawtelle@gmail.com
 
 Roshan Nunna - rgnunna@gmail.com
 
+Merone Delnesa - mtd6620@rit.edu
+
 Team 30's Music DBMS term Project
