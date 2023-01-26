@@ -32,7 +32,7 @@
 ### There also exists a relationship between songs and albums as follows:
 
 – Every song must appear on an album.
-– Each song on an album has a tack number.
+– Each song on an album has a track number.
 – A song may appear on multiple albums with different track numbers.
 
 ### You must be able to store the following actions performed by users:
