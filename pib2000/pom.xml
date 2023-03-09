@@ -20,6 +20,13 @@
             <version>11</version>
             <type>pom</type>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>
