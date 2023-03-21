@@ -4,13 +4,16 @@ package com.pib2000;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class pibCLI {
+    int u_id ;
 
     public pibCLI(){
         System.out.println("Welcome to pib2000 music");
+        u_id = -1;
     }
 
     private void userLogin(){
@@ -26,7 +29,7 @@ public class pibCLI {
         // yyyy-mm-dd: lastaccessdate or creationdate
         // If user created an account record the time they created
     }
-    private void collectionMenu() throws IOException{
+    private void collectionMenu() throws IOException {
         System.out.println("Welcome to the collection menu");
         char query;
         boolean running = true;
@@ -43,6 +46,49 @@ public class pibCLI {
                         break;
                     case '2': // Edit Collections (Edit Name, delete, add, delete, add song, add album, delete song, delete album)
                         System.out.println("Editing");
+                        boolean edit_running = true;
+                        while(edit_running){
+                            System.out.print("Collections Edit > ");
+                            String edit_input = r.readLine();
+                            String edit_cmd[] = edit_input.split(" ");
+                            if(edit_cmd.length >= 1){
+                                switch (edit_cmd[0]){
+                                    case "add":
+                                        if(edit_cmd.length < 2){
+                                            System.out.println("Usage: add [name]");
+                                            System.out.println("Please input a valid command or press \'h\' to view menu options");
+                                            break;
+                                        }
+                                        Collections.addCollection(u_id, edit_cmd[1]);
+                                        break;
+                                    case "del":
+                                        if(edit_cmd.length < 2){
+                                            System.out.println("Usage: del [name]");
+                                            System.out.println("Please input a valid command or press \'h\' to view menu options");
+                                            break;
+                                        }
+                                        Collections.deleteCollection(u_id, edit_cmd[1]);
+                                        break;
+                                    case "edit":
+                                        if(edit_cmd.length < 3){
+                                            System.out.println("Usage: edit [name][new name]");
+                                            System.out.println("Please input a valid command or press \'h\' to view menu options");
+                                            break;
+                                        }
+                                        Collections.editCollection(u_id, edit_cmd[1], edit_cmd[2]);
+                                        break;
+                                    case "h":
+                                        collectionEditHelpMessage();
+                                        break;
+                                    case "q":
+                                        edit_running = false;
+                                        break;
+                                    default:
+                                        System.out.println("Please input a valid or press \'h\' to view menu options");
+                                        break;
+                                }
+                            }
+                        }
                         break;
                     case '3': // Play Collection (Play song or play entire collection)
                         System.out.println("Play");
@@ -147,6 +193,16 @@ public class pibCLI {
                 "h - Help\n"+
                 "q - Quit");
     }
+
+    private void collectionEditHelpMessage(){
+        System.out.println(
+                "add [name] - Add Collection\n" +
+                "del [name] - Delete Collection\n" +
+                "edit [name][new name] - Edit Collection Name\n" +
+                "h - Help\n"+
+                "q - Quit");
+    }
+
     private void searchHelpMessage(){
         System.out.println( "1 - Search Artists\n" +
                 "2 - Search Albums\n" +
