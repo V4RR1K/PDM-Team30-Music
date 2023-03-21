@@ -41,10 +41,10 @@ public class pibCLI {
                     case '1': // View Collections (Must show (Name, NumSongs, TotalDuration)
                         System.out.println("View");
                         break;
-                    case '2': // Edit Collections
+                    case '2': // Edit Collections (Edit Name, delete, add, delete, add song, add album, delete song, delete album)
                         System.out.println("Editing");
                         break;
-                    case '3': // Play Collection
+                    case '3': // Play Collection (Play song or play entire collection)
                         System.out.println("Play");
                         break;
                     case 'h':
@@ -61,6 +61,85 @@ public class pibCLI {
         }
     }
 
+
+
+    private void searchMenu() throws IOException{
+        System.out.println("Welcome to the search menu");
+        char query;
+        boolean running = true;
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        while (running){
+            System.out.print("Search > ");
+            String input = r.readLine();
+            if (input.length() >= 1){
+                query = input.charAt(0);
+                // Get user input
+                switch(query){ // Search must include song’s name, the artist’s name, the album, the length and the listen count
+                    case '1': // Search Artists
+                        System.out.println("Search Artists");
+                        break;
+                    case '2': // Search Album
+                        System.out.println("Search Albums");
+                        break;
+                    case '3': // Search Songs
+                        System.out.println("Search Songs");
+                        break;
+                    case 'h':
+                        searchHelpMessage();
+                        break;
+                    case 'q':
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Please input a valid or press \'h\' to view menu options");
+                        break;
+                }
+            }
+        }
+    }
+
+    private void friendsMenu() throws IOException{
+        char query;
+        boolean running = true;
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        while (running){
+            System.out.print("Friends > ");
+            String input = r.readLine();
+            if (input.length() >= 1){
+                query = input.charAt(0);
+                // Get user input
+                switch(query){
+                    case '1': // View Friends
+                        System.out.println("View");
+                        break;
+                    case '2': // Search Friend
+                        System.out.println("Search Friend");
+                        break;
+                    case '3': // Remove Friend
+                        System.out.println("Remove Friend");
+                        break;
+                    case 'h':
+                        friendHelpMessage();
+                        break;
+                    case 'q':
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Please input a valid or press \'h\' to view menu options");
+                        break;
+                }
+            }
+        }
+    }
+
+    private void helpMessage(){
+        System.out.println( "1 - Collections\n" +
+                "2 - Search\n" +
+                "3 - Friends\n" +
+                "h - Help\n"+
+                "q - Quit");
+    }
+
     private void collectionHelpMessage(){
         System.out.println( "1 - ViewCollections\n" +
                 "2 - Edit Collections\n" +
@@ -68,19 +147,18 @@ public class pibCLI {
                 "h - Help\n"+
                 "q - Quit");
     }
-
-    private void searchMenu(){
-        System.out.println("Welcome to the search menu");
+    private void searchHelpMessage(){
+        System.out.println( "1 - Search Artists\n" +
+                "2 - Search Albums\n" +
+                "3 - Search Songs\n" +
+                "h - Help\n"+
+                "q - Quit");
     }
 
-    private void friendsMenu(){
-        System.out.println("Welcome to the friends menu");
-    }
-
-    private void helpMessage(){
-        System.out.println( "1 - Collections\n" +
-                "2 - Search\n" +
-                "3 - Friends\n" +
+    private void friendHelpMessage(){
+        System.out.println( "1 - View Friends\n" +
+                "2 - Search Friends\n" +
+                "3 - Remove Friends\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
