@@ -12,7 +12,7 @@ public class DbDriver {
     Connection conn = null;
     Session session = null;
 
-    public DbDriver getInstance() {
+    public static DbDriver getInstance() {
         if (instance == null) {
             try {
                 instance = new DbDriver();
