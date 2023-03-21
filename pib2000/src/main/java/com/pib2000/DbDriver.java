@@ -32,6 +32,7 @@ public class DbDriver {
             return null;
         }
     }
+    //beans
     public DbDriver() throws SQLException {
         int lport = 54390;
         String rhost = "starbug.cs.rit.edu";
