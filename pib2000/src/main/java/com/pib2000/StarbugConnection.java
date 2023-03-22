@@ -47,9 +47,9 @@ public class StarbugConnection implements AutoCloseable {
         int lport = 54390;
         String rhost = "starbug.cs.rit.edu";
         int rport = 5432;
-        String user = ""; //change to your username
-        String password = ""; //change to your password
-        String databaseName = ""; //change to your database name
+        String user = "***REMOVED***"; //change to your username
+        String password = "***REMOVED***"; //change to your password
+        String databaseName = "***REMOVED***"; //change to your database name
         String driverName = "org.postgresql.Driver";
         try {
             Properties config = new Properties();
