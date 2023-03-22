@@ -13,13 +13,15 @@ import java.util.Properties;
  * @author Roshan Nunna
  */
 public class StarbugConnection implements AutoCloseable {
-    Connection conn = null;
-    Session session = null;
-
+    public Connection conn = null;
+    public Session session = null;
+    public Statement stmt = null;
+    public ResultSet rs = null;
 
     public ResultSet doQuery(String query) {
-        try (Statement stmt = conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(query);
+        try  {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
             return rs;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,7 +81,15 @@ public class StarbugConnection implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        conn.close();
+        if (rs != null && !rs.isClosed()) {
+            rs.close();
+        }
+        if (stmt != null && !stmt.isClosed()) {
+            stmt.close();
+        }
+        if (conn != null && !conn.isClosed()) {
+            conn.close();
+        }
         session.disconnect();
     }
 }
