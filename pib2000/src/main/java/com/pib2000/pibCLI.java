@@ -254,5 +254,7 @@ public class pibCLI {
                 }
             }
         }
+        if (DbDriver.getInstance().conn != null) try {DbDriver.getInstance().conn.close(); } catch (SQLException ignore) {}
+        if (DbDriver.getInstance().session != null) DbDriver.getInstance().session.disconnect();
     }
 }

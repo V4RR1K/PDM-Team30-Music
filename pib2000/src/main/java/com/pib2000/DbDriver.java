@@ -32,6 +32,17 @@ public class DbDriver {
             return null;
         }
     }
+
+    public int doUpdate(String query) {
+        try (Statement stmt = conn.createStatement()) {
+            int rs = stmt.executeUpdate(query);
+            return rs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     //beans
     public DbDriver() throws SQLException {
         int lport = 54390;
