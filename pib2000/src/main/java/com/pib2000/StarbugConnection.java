@@ -6,6 +6,12 @@ import com.jcraft.jsch.Session;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * StarbugConnection is a class representing a single connection to starbug. It is an attempt ot make a
+ * better version of DbDriver.
+ *
+ * @author Roshan Nunna
+ */
 public class StarbugConnection implements AutoCloseable {
     Connection conn = null;
     Session session = null;
