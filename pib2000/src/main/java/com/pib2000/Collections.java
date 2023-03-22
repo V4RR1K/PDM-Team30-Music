@@ -23,11 +23,10 @@ public class Collections{
     }
 
     public static void addAlbumToCollection(int u_id, int c_id, int al_id) {
-        try (StarbugConnection cs = new StarbugConnection();
-                Statement stmt = cs.conn.createStatement()) {
+        try (StarbugConnection cs = new StarbugConnection();) {
             String query = "insert into \"Song_in_collection\" (SELECT " + c_id + ", " + u_id + ",  sia.s_id from \"Song_in_album\" sia "
                 + "where sia.al_id = "  + al_id + ")";
-            int rs = stmt.executeUpdate(query);
+            int rs = cs.doUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
