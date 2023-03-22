@@ -77,6 +77,9 @@ public class pibCLI {
                                         }
                                         Collections.editCollection(u_id, edit_cmd[1], edit_cmd[2]);
                                         break;
+                                    case "addAlbum":
+                                        Collections.addAlbumToCollection(u_id, Integer.parseInt(edit_cmd[1]), Integer.parseInt(edit_cmd[2]));
+                                        break;
                                     case "h":
                                         collectionEditHelpMessage();
                                         break;

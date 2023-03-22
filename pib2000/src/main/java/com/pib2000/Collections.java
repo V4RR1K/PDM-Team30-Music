@@ -8,6 +8,7 @@ import java.sql.Statement;
  * Class intended to handle all Collection related queries
  *
  * @author Andromeda Sawtelle [andromeda.sawtelle@gmail.com]
+ * @author Roshan Nunna
  */
 
 public class Collections{
@@ -19,6 +20,17 @@ public class Collections{
         this.c_id = c_id;
         this.u_id = u_id;
         this.collection_name = collection_name;
+    }
+
+    public static void addAlbumToCollection(int u_id, int c_id, int al_id) {
+        try (StarbugConnection cs = new StarbugConnection();
+                Statement stmt = cs.conn.createStatement()) {
+            String query = "insert into \"Song_in_collection\" (SELECT " + c_id + ", " + u_id + ",  sia.s_id from \"Song_in_album\" sia "
+                + "where sia.al_id = "  + al_id + ")";
+            int rs = stmt.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addCollection(int u_id, String name) {
