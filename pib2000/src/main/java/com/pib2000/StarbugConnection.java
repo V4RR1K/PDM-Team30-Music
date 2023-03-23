@@ -20,10 +20,16 @@ public class StarbugConnection implements AutoCloseable {
 
     public ResultSet doQuery(String query) {
         try  {
+            if (rs != null && !rs.isClosed()) {
+                rs.close();
+            }
+            if (stmt != null && !stmt.isClosed()) {
+                stmt.close();
+            }
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             return rs;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -40,7 +46,7 @@ public class StarbugConnection implements AutoCloseable {
     }
 
     //beans
-    public StarbugConnection() throws SQLException {
+    public StarbugConnection() {
         int lport = 54390;
         String rhost = "starbug.cs.rit.edu";
         int rport = 5432;
@@ -90,6 +96,8 @@ public class StarbugConnection implements AutoCloseable {
         if (conn != null && !conn.isClosed()) {
             conn.close();
         }
-        session.disconnect();
+        if (session != null && session.isConnected()) {
+            session.disconnect();
+        }
     }
 }

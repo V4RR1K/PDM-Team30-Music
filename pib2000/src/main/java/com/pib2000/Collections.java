@@ -22,12 +22,106 @@ public class Collections{
         this.collection_name = collection_name;
     }
 
-    public static void addAlbumToCollection(int u_id, int c_id, int al_id) {
+    private static int getCollectionId(int u_id, String collectionName) {
+        try (StarbugConnection cs = new StarbugConnection()) {
+            String query = "select c_id from \"Collection\" where u_id = " + u_id + " and collection_name = \'" + collectionName + "\'";
+            ResultSet rs = cs.doQuery(query);
+            if (rs.next()) {
+                return rs.getInt("c_id");
+            }
+            return -1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private static int getAlbumId(String albumName) {
+        try (StarbugConnection cs = new StarbugConnection()) {
+            String query = "select al_id from \"Album\" where albumname = \'" + albumName + "\'";
+            ResultSet rs = cs.doQuery(query);
+            if (rs.next()) {
+                return rs.getInt("al_id");
+            }
+            return -1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private static int getSongId(String songName) {
+        try (StarbugConnection cs = new StarbugConnection()) {
+            String query = "select s_id from \"Song\" where name = \'" + songName + "\'";
+            ResultSet rs = cs.doQuery(query);
+            if (rs.next()) {
+                return rs.getInt("s_id");
+            }
+            return -1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static void addAlbumToCollection(int u_id, String collectionName, String albumName) {
+        collectionName = collectionName.replace('_', ' ');
+        albumName = albumName.replace('_', ' ');
+        int c_id = getCollectionId(u_id, collectionName);
+        int al_id = getAlbumId(albumName);
         try (StarbugConnection cs = new StarbugConnection();) {
             String query = "insert into \"Song_in_collection\" (SELECT " + c_id + ", " + u_id + ",  sia.s_id from \"Song_in_album\" sia "
                 + "where sia.al_id = "  + al_id + ")";
             int rs = cs.doUpdate(query);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addSongToCollection(int u_id, String collectionName, String songName) {
+        collectionName = collectionName.replace('_', ' ');
+        songName = songName.replace('_', ' ');
+        int c_id = getCollectionId(u_id, collectionName);
+        int s_id = getSongId(songName);
+        try (StarbugConnection cs = new StarbugConnection();) {
+            String query = "insert into \"Song_in_collection\" (SELECT " + c_id + ", " + u_id + ",  sia.s_id from \"Song\" sia "
+                    + "where sia.s_id = "  + s_id + ")";
+            int rs = cs.doUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeSongFromCollection(int u_id, String collectionName, String songName) {
+        collectionName = collectionName.replace('_', ' ');
+        songName = songName.replace('_', ' ');
+        int c_id = getCollectionId(u_id, collectionName);
+        int s_id = getSongId(songName);
+        try (StarbugConnection cs = new StarbugConnection()) {
+            int rs = cs.doUpdate("delete from " +
+                    "\"Song_in_collection\" where u_id = " + u_id + " and c_id = " + c_id + "and s_id = " + s_id );
+            if (rs > 0) {
+                System.out.println("Song successfully deleted from collection");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeAlbumFromCollection(int u_id, String collectionName, String albumName) {
+        collectionName = collectionName.replace('_', ' ');
+        albumName = albumName.replace('_', ' ');
+        int c_id = getCollectionId(u_id, collectionName);
+        int al_id = getAlbumId(albumName);
+        try (StarbugConnection cs = new StarbugConnection()) {
+            int rs = cs.doUpdate("delete from " +
+                    "\"Song_in_collection\" where u_id = " + u_id + " and c_id = " + c_id + " and s_id in (select s.s_id from \"Song_in_collection\" s where s.s_id = " + al_id + ")");
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -42,12 +136,9 @@ public class Collections{
         if(c_id < 0)
             c_id *= -1;
 
-        ResultSet rs = null;
-        Statement stmt = null;
-        try {
-            stmt = DbDriver.getInstance().conn.createStatement();
+        try (StarbugConnection sc = new StarbugConnection()) {
             String query = "select c_id from \"Collection\" where c_id = " + c_id + " and u_id = " + u_id;
-            rs = stmt.executeQuery(query);
+            ResultSet rs = sc.doQuery(query);
             while (rs.next()) {
                 int rs_c_id = rs.getInt("c_id");
                 if(c_id == rs_c_id){
@@ -55,41 +146,47 @@ public class Collections{
                     return;
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-            if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
-        }
 
-        int result = DbDriver.getInstance().doUpdate("insert into " +
-                "\"Collection\" values (" + c_id + ", " + u_id + ", \'" + name + "\')");
+        try (StarbugConnection sc = new StarbugConnection()) {
+            int result = sc.doUpdate("insert into " +
+                    "\"Collection\" values (" + c_id + ", " + u_id + ", \'" + name + "\')");
 
-        if(result > 0){
-            System.out.println(name + " successfully added");
+            if(result > 0){
+                System.out.println(name + " successfully added");
+            }
+            else{
+                System.out.println("Error in adding " + name);
+            }
         }
-        else{
-            System.out.println("Error in adding " + name);
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void deleteCollection(int u_id, String name){
-        if(u_id < 0){
-            System.out.println("Not logged in. Login/create an account");
-            return;
-        }
-        int result = DbDriver.getInstance().doUpdate("delete from " +
-                "\"Collection\" where u_id = " + u_id + " and collection_name = \'" + name + "\'");
+    public static void deleteCollection(int u_id, String name) {
+        try (StarbugConnection sc = new StarbugConnection()) {
+            if(u_id < 0){
+                System.out.println("Not logged in. Login/create an account");
+                return;
+            }
+            int result = sc.doUpdate("delete from " +
+                    "\"Collection\" where u_id = " + u_id + " and collection_name = \'" + name + "\'");
 
-        if(result > 0){
-            System.out.println(name + " successfully deleted");
+            if(result > 0){
+                System.out.println(name + " successfully deleted");
+            }
+            else if(result == 0){
+                System.out.println(name + " did not exist");
+            }
+            else{
+                System.out.println("Error in deleting " + name);
+            }
         }
-        else if(result == 0){
-            System.out.println(name + " did not exist");
-        }
-        else{
-            System.out.println("Error in deleting " + name);
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -102,11 +199,9 @@ public class Collections{
         int new_c_id = new_name.hashCode() + u_id;
 
         ResultSet rs = null;
-        Statement stmt = null;
-        try {
-            stmt = DbDriver.getInstance().conn.createStatement();
+        try (StarbugConnection sc = new StarbugConnection()) {
             String query = "select c_id from \"Collection\" where c_id = " + new_c_id + " and u_id = " + u_id;
-            rs = stmt.executeQuery(query);
+            rs = sc.doQuery(query);
             while (rs.next()) {
                 int rs_c_id = rs.getInt("c_id");
                 if(new_c_id == rs_c_id){
@@ -114,25 +209,27 @@ public class Collections{
                     return;
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-            if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
-            if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+
+        try (StarbugConnection sc = new StarbugConnection()) {
+            int result = sc.doUpdate("update \"Collection\" set collection_name = \'" +
+                    new_name + "\', c_id = " + new_c_id + " where collection_name = \'" + name + "\'");
+
+            if(result > 0){
+                System.out.println(name + " successfully updated to " + new_name);
+            }
+            else if(result == 0){
+                System.out.println(name + " did not exist");
+            }
+            else{
+                System.out.println("Error in updating " + name);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
-        int result = DbDriver.getInstance().doUpdate("update \"Collection\" set collection_name = \'" +
-                new_name + "\', c_id = " + new_c_id + " where collection_name = \'" + name + "\'");
-
-        if(result > 0){
-            System.out.println(name + " successfully updated to " + new_name);
-        }
-        else if(result == 0){
-            System.out.println(name + " did not exist");
-        }
-        else{
-            System.out.println("Error in updating " + name);
-        }
     }
 }

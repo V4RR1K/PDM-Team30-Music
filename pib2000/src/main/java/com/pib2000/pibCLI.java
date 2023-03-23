@@ -78,7 +78,28 @@ public class pibCLI {
                                         Collections.editCollection(u_id, edit_cmd[1], edit_cmd[2]);
                                         break;
                                     case "addAlbum":
-                                        Collections.addAlbumToCollection(u_id, Integer.parseInt(edit_cmd[1]), Integer.parseInt(edit_cmd[2]));
+                                        if (edit_cmd.length < 2) {
+                                            System.out.println("Usage: addAlbum [Collection_Name] [Album_Name]");
+                                        }
+                                        Collections.addAlbumToCollection(u_id, edit_cmd[1], edit_cmd[2]);
+                                        break;
+                                    case "addSong":
+                                        if (edit_cmd.length < 2) {
+                                            System.out.println("Usage: addSong [Collection_Name] [Song_Name]");
+                                        }
+                                        Collections.addSongToCollection(u_id, edit_cmd[1], edit_cmd[2]);
+                                        break;
+                                    case "delAlbum":
+                                        if (edit_cmd.length < 2) {
+                                            System.out.println("Usage: delAlbum [Collection_Name] [Album_Name]");
+                                        }
+                                        Collections.removeAlbumFromCollection(u_id, edit_cmd[1], edit_cmd[2]);
+                                        break;
+                                    case "delSong":
+                                        if (edit_cmd.length < 2) {
+                                            System.out.println("Usage: delSong [Collection_Name] [Song_Name]");
+                                        }
+                                        Collections.removeSongFromCollection(u_id, edit_cmd[1], edit_cmd[2]);
                                         break;
                                     case "h":
                                         collectionEditHelpMessage();
