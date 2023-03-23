@@ -13,6 +13,7 @@ public class pibCLI {
 
     public pibCLI(){
         System.out.println("Welcome to pib2000 music");
+        // Call user login
         u_id = -1;
     }
 
