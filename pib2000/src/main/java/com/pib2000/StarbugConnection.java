@@ -63,21 +63,58 @@ public class StarbugConnection implements AutoCloseable {
             session.setConfig(config);
             session.setConfig("PreferredAuthentications","publickey,keyboard-interactive,password");
             session.connect();
-            System.out.println("Connected");
             int assigned_port = session.setPortForwardingL(lport, "localhost", rport);
-            System.out.println("Port Forwarded");
 
             // Assigned port could be different from 5432 but rarely happens
             String url = "jdbc:postgresql://localhost:"+ assigned_port + "/" + databaseName;
 
-            System.out.println("database Url: " + url);
             Properties props = new Properties();
             props.put("user", user);
             props.put("password", password);
 
             Class.forName(driverName);
             conn = DriverManager.getConnection(url, props);
-            System.out.println("Database connection established");
+            // Do something with the database....
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public StarbugConnection(boolean isPrint) {
+        int lport = 54390;
+        String rhost = "starbug.cs.rit.edu";
+        int rport = 5432;
+        String user = System.getenv("STARUSER"); //change to your username
+        String password = System.getenv("STARPASS"); //change to your password
+        String databaseName = System.getenv("DBNAME"); //change to your database name
+        String driverName = "org.postgresql.Driver";
+        try {
+            Properties config = new Properties();
+            config.put("StrictHostKeyChecking", "no");
+            JSch jsch = new JSch();
+            session = jsch.getSession(user, rhost, 22);
+            session.setPassword(password);
+            session.setConfig(config);
+            session.setConfig("PreferredAuthentications","publickey,keyboard-interactive,password");
+            session.connect();
+            if (isPrint)
+                System.out.println("Connected");
+            int assigned_port = session.setPortForwardingL(lport, "localhost", rport);
+            if (isPrint)
+                System.out.println("Port Forwarded");
+
+            // Assigned port could be different from 5432 but rarely happens
+            String url = "jdbc:postgresql://localhost:"+ assigned_port + "/" + databaseName;
+            if (isPrint)
+                System.out.println("database Url: " + url);
+            Properties props = new Properties();
+            props.put("user", user);
+            props.put("password", password);
+
+            Class.forName(driverName);
+            conn = DriverManager.getConnection(url, props);
+            if (isPrint)
+                System.out.println("Database connection established");
             // Do something with the database....
         } catch (Exception e) {
             e.printStackTrace();
