@@ -1,5 +1,6 @@
 package com.pib2000;
 
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,6 +18,16 @@ public class User {
     private String email;
     private String creationDate;
     private String lastAccess;
+
+    private final String[] column_names = {"u_id",
+            "username",
+            "password",
+            "firstname",
+            "lastname",
+            "email",
+            "creationdate",
+            "lastaccessdate"
+    };
 
     public User(int id){
         loadUser(id);
@@ -46,6 +57,7 @@ public class User {
         }
     }
     public User createUser(String username, String password, String firstname, String lastname, String email){
+        this.id = nextId();
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -71,12 +83,17 @@ public class User {
         }
     }
 
-    public User loadUser( int id ){
+    public void loadUser(int id ){
         try (StarbugConnection connection = new StarbugConnection()){
-            return null;
+            String query = "SELECT * FROM \"User\" WHERE u_id = " + id;
+            ResultSet result = connection.doQuery(query);
+            if (result.next()){
+                System.out.println(result.getString(column_names[1]));
+                System.out.println(result.getString(column_names[2]));
+            }
+
         } catch (Exception e){
             e.printStackTrace();
-            return null;
         }
     }
 
@@ -92,5 +109,10 @@ public class User {
     public boolean loginUser(){
         // Update last login date
         return true;
+    }
+
+    // User testing
+    public static void main(String[] args){
+        User existing = new User(1);
     }
 }
