@@ -48,12 +48,17 @@ public class User {
         return d;
     }
 
+    private String generateDateString(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
     private int nextId(){
         try (StarbugConnection connection = new StarbugConnection()){
-            String query = "SELECT MAX(u_id) FROM USER AS MAXID";
+            String query = "SELECT MAX(u_id) FROM \"User\"";
             ResultSet rs = connection.doQuery(query);
             if (rs.next()){
-                return 1 + rs.getInt("MAXID");
+                return 1 + rs.getInt(1);
             }
             return -1;
         } catch (Exception e){
@@ -70,32 +75,28 @@ public class User {
         this.email = email;
         this.creationDate = generateDate();
 
-        String query = "INSERT INTO User ("
+        String query = "INSERT INTO \"User\"("
                 + column_names[0] + ", "
                 + column_names[1] + ", "
                 + column_names[2] + ", "
                 + column_names[3] + ", "
                 + column_names[4] + ", "
                 + column_names[5] + ", "
-                + column_names[6] + ", "
-                + column_names[7] + ") "
-                + "VALUES ("
-                + this.id + ", "
-                + this.username + ", "
-                + this.password + ", "
-                + this.firstname + ", "
-                + this.lastname + ", "
-                + this.email + ", "
-                + this.creationDate + ", "
-                + this.lastAccess + ")";
+                + column_names[6] + ") "
+                + "VALUES("
+                + this.nextId() + ", "
+                + "\"" + this.username + "\"" + ", "
+                + "\"" + this.password + "\"" +  ", "
+                + "\"" + this.firstname + "\"" + ", "
+                + "\"" + this.lastname + "\"" + ", "
+                + "\"" + this.email + "\"" + ", "
+                + generateDateString(this.creationDate) + ");";
 
         System.out.println(query);
 
-
-
-        // Manually generate create date, login date
         try (StarbugConnection connection = new StarbugConnection()){
-            return null;
+            connection.doUpdate(query);
+            return this;
         } catch (Exception e){
             e.printStackTrace();
             return null;
@@ -167,6 +168,7 @@ public class User {
 //        System.out.println(existing);
         User newUser = new User("GregLynskey", "fish",
                 "Greg", "Lynskey", "gcl5615@rit.edu");
+
 
     }
 }
