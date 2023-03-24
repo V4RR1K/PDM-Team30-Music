@@ -15,7 +15,7 @@ public class SongSearch {
     private final static String defaultFilter = "order by s.name, art.\"Name\"";
     private final static String songNameFilter = "order by s.name";
     private final static String artistFilter = "order by art.\"Name\"";
-    private final static String albumFilter = "order by a.albumname";
+    private final static String releaseFilter = "order by r.release";
     private final static String genreFilter = "order by g.genrename";
 
 
@@ -36,8 +36,8 @@ public class SongSearch {
             case "artist":
                 toAppend = query + artistFilter;
                 break;
-            case "album":
-                toAppend = query + albumFilter;
+            case "release":
+                toAppend = query + releaseFilter;
                 break;
             case "genre":
                 toAppend = query + genreFilter;
@@ -54,13 +54,14 @@ public class SongSearch {
     public static void searchName(String name, String filterString) {
         ResultSet rs;
         try (StarbugConnection cs = new StarbugConnection()) {
-            String query = "select s.s_id as s_id, s.name as songname, s.length as length, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
+            String query = "select s.s_id as s_id, s.name as songname, s.length as length, r.release, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
                     "    left join \"Song_in_album\" sia on sia.s_id = s.s_id\n" +
                     "    left join \"Album\" a on a.al_id = sia.al_id\n" +
                     "    left join \"Produces_s\" ps on ps.s_id = s.s_id\n" +
                     "    left join \"Artist\" art on art.ar_id = ps.ar_id\n" +
                     "    left join \"Genre_s\" gs on gs.s_id = s.s_id\n" +
-                    "    left join \"Genre\" g on g.g_id = gs.g_id)\n" +
+                    "    left join \"Genre\" g on g.g_id = gs.g_id\n" +
+                    "    left join \"Released_On\" r on r.s_id = s.s_id)\n" +
                     "where s.name like \'%" + name + "%\'\n";
             query = applyFilter(query, filterString);
             rs = cs.doQuery(query);
@@ -115,13 +116,14 @@ public class SongSearch {
     public static void searchArtist(String artist, String filterString) {
         ResultSet rs;
         try (StarbugConnection cs = new StarbugConnection()) {
-            String query = "select s.s_id as s_id, s.name as songname, s.length as length, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
+            String query = "select s.s_id as s_id, s.name as songname, s.length as length, r.release, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
                     "    left join \"Song_in_album\" sia on sia.s_id = s.s_id\n" +
                     "    left join \"Album\" a on a.al_id = sia.al_id\n" +
                     "    left join \"Produces_s\" ps on ps.s_id = s.s_id\n" +
                     "    left join \"Artist\" art on art.ar_id = ps.ar_id\n" +
                     "    left join \"Genre_s\" gs on gs.s_id = s.s_id\n" +
-                    "    left join \"Genre\" g on g.g_id = gs.g_id)\n" +
+                    "    left join \"Genre\" g on g.g_id = gs.g_id\n" +
+                    "    left join \"Released_On\" r on r.s_id = s.s_id)\n" +
                     "where art.\"Name\" like \'%" + artist + "%\'\n";
             query = applyFilter(query, filterString);
             rs = cs.doQuery(query);
@@ -176,13 +178,14 @@ public class SongSearch {
     public static void searchAlbum(String album, String filterString) {
         ResultSet rs;
         try (StarbugConnection cs = new StarbugConnection()) {
-            String query = "select s.s_id as s_id, s.name as songname, s.length as length, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
+            String query = "select s.s_id as s_id, s.name as songname, s.length as length, r.release, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
                     "    left join \"Song_in_album\" sia on sia.s_id = s.s_id\n" +
                     "    left join \"Album\" a on a.al_id = sia.al_id\n" +
                     "    left join \"Produces_s\" ps on ps.s_id = s.s_id\n" +
                     "    left join \"Artist\" art on art.ar_id = ps.ar_id\n" +
                     "    left join \"Genre_s\" gs on gs.s_id = s.s_id\n" +
                     "    left join \"Genre\" g on g.g_id = gs.g_id\n" +
+                    "    left join \"Released_On\" r on r.s_id = s.s_id)\n" +
                     "where a.albumname like \'%" + album + "%\'\n";
             query = applyFilter(query, filterString);
             rs = cs.doQuery(query);
@@ -237,13 +240,14 @@ public class SongSearch {
     public static void searchGenre(String genre, String filterString) {
         ResultSet rs;
         try (StarbugConnection cs = new StarbugConnection()) {
-            String query = "select s.s_id as s_id, s.name as songname, s.length as length, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
+            String query = "select s.s_id as s_id, s.name as songname, s.length as length, r.release, g.genrename as genre, a.albumname as albumname, art.\"Name\" as artistname from (\"Song\" s\n" +
                     "    left join \"Song_in_album\" sia on sia.s_id = s.s_id\n" +
                     "    left join \"Album\" a on a.al_id = sia.al_id\n" +
                     "    left join \"Produces_s\" ps on ps.s_id = s.s_id\n" +
                     "    left join \"Artist\" art on art.ar_id = ps.ar_id\n" +
                     "    left join \"Genre_s\" gs on gs.s_id = s.s_id\n" +
-                    "    left join \"Genre\" g on g.g_id = gs.g_id)\n" +
+                    "    left join \"Genre\" g on g.g_id = gs.g_id\n" +
+                    "    left join \"Released_On\" r on r.s_id = s.s_id)\n" +
                     "where g.genrename like \'%" + genre + "%\'\n";
             query = applyFilter(query, filterString);
             rs = cs.doQuery(query);

@@ -179,7 +179,7 @@ public class pibCLI {
                         }
                         break;
                     case '3': // Play Collection (Play song or play entire collection)
-                        System.out.println("Play");
+                        System.out.println("song or collection?");
                         boolean play_running = true;
                         while(play_running) {
                             System.out.print("Play > ");
@@ -228,7 +228,6 @@ public class pibCLI {
             }
         }
     }
-
 
     private void searchMenu() throws IOException{
         System.out.println("Welcome to the search menu");
@@ -283,7 +282,7 @@ public class pibCLI {
     private String sortFilter() throws IOException {
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Specific sorting criteria? Press enter to skip or type in any of the following options:");
-        System.out.println("songName\nartist\nalbum\ngenre");
+        System.out.println("songName\nartist\nrelease\ngenre");
         System.out.println("ex. songName true = sort by name of song in descending order, artist false = sort by name of artist in ascending order");
         return r.readLine();
     }
