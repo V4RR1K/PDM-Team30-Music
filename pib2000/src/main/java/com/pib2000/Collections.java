@@ -266,7 +266,7 @@ public class Collections{
             try (StarbugConnection cs2 = new StarbugConnection()) {
                 ResultSet rs_num_songs = cs2.doQuery("select count(*) from \"Song_in_collection\"" +
                         " where c_id =" + c_id);
-                if (rs.next()) {
+                if (rs_num_songs.next()) {
                     num_songs = rs_num_songs.getInt("count");
                 }
                 else {
@@ -281,7 +281,9 @@ public class Collections{
                 ResultSet rs_duration_minutes = cs3.doQuery("select extract(hour from (select sum(length)\n" +
                         "            from \"Song\" s\n" +
                         "            where s.s_id in (select s_id from \"Song_in_collection\" where c_id = " + c_id + "))) as minutes");
-                duration_minutes = rs_duration_minutes.getInt("minutes");
+                if (rs_duration_minutes.next()) {
+                    duration_minutes = rs_duration_minutes.getInt("minutes");
+                }
                 System.out.println("Duration, in Minutes: " + duration_minutes);
                 System.out.println();
             } catch (Exception e) {
