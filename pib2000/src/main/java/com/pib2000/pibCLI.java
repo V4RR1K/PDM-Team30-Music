@@ -255,7 +255,7 @@ public class pibCLI {
                         System.out.println("Editing Friends");
                         boolean edit_friends_running = true;
                         while(edit_friends_running){
-                            System.out.print("Friends Edit >");
+                            System.out.print("Friends Edit > ");
                             String editF_input = r.readLine();
                             String[] editF_cmd = editF_input.split(" ");
                             if(editF_cmd.length >= 1){
@@ -276,6 +276,15 @@ public class pibCLI {
                                             break;
                                         }
                                         Following.removeUserFromFollowing(u_id, Integer.parseInt(editF_cmd[1]));
+                                        break;
+                                    case "h":
+                                        friendEditHelpMessage();
+                                        break;
+                                    case "q":
+                                        edit_friends_running = false;
+                                        break;
+                                    default:
+                                        System.out.println("Please input a valid or press \'h\' to view menu options");
                                         break;
                                 }
                             }
@@ -334,6 +343,14 @@ public class pibCLI {
         System.out.println( "1 - View Friends\n" +
                 "2 - Search Friends\n" +
                 "3 - Edit Friends\n" +
+                "h - Help\n"+
+                "q - Quit");
+    }
+
+    private void friendEditHelpMessage(){
+        System.out.println(
+                "add [friendID] - Add Friend\n" +
+                "del [friendID] - Delete Friend\n" +
                 "h - Help\n"+
                 "q - Quit");
     }

@@ -3,6 +3,7 @@ package com.pib2000;
 import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.sql.SQLException;
 
 /**
  * Class intended to handle all Follower related queries
@@ -21,7 +22,7 @@ public class Following {
 
     public static int getFollowingID(int user_id){
         try (StarbugConnection cs = new StarbugConnection()){
-            String query = "select follows from \"Following\" where u_id = " + user_id;
+            String query = "select follows from \"Follows\" where u_id = " + user_id;
             ResultSet rs = cs.doQuery(query);
             if(rs.next()){
                 return rs.getInt("follows");
@@ -69,17 +70,18 @@ public class Following {
 
     public static void addUserToFollowing(int user_id, int following_id){
         try (StarbugConnection cs = new StarbugConnection()){
-            String query = "insert into \"Following\" (SELECT " + user_id + ", " + following_id;
-            int rs = cs.doUpdate(query);
+            String query = "insert into \"Follows\" (SELECT " + user_id + ", " + following_id + ")";
+            cs.doUpdate(query);
         }
         catch(Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Unable to add- user " + following_id + " is already added as a friend or does not exist.");
         }
     }
 
     public static void removeUserFromFollowing(int user_id, int following_id){
         try (StarbugConnection cs = new StarbugConnection ()){
-            String query = "delete from \"Following\" where u_id = " + user_id + " and follows = " + following_id;
+            String query = "delete from \"Follows\" where u_id = " + user_id + " and follows = " + following_id;
             int rs = cs.doUpdate(query);
             if (rs > 0){
                 System.out.println("User successfully deleted from Following list");
@@ -98,7 +100,7 @@ public class Following {
         ResultSet rs = null;
         Map<Integer, String> friendsMap = new LinkedHashMap<>();
         try (StarbugConnection cs = new StarbugConnection()){
-            String query = "select follows from \"Following\" where u_id = " + user_id;
+            String query = "select follows from \"Follows\" where u_id = " + user_id;
             rs = cs.doQuery(query);
             while(rs.next()){
                 int friend_id = rs.getInt("follows");
@@ -120,15 +122,18 @@ public class Following {
 
     public static void searchFriend(String email){
         try (StarbugConnection cs = new StarbugConnection()){
-            String query = "select u_id from \"User\" where email = " + email;
+            String query = "select u_id from \"User\" where email = " + "\'" + email + "\'";
             ResultSet rs = cs.doQuery(query);
-            int friendID = rs.getInt("u_id");
 
-            // print info about friend
-            System.out.println("Username: " + getFriendUsername(friendID));
-            System.out.println("ID: " + friendID);
-            System.out.println("Name: " + getFriendFullName(friendID));
-            System.out.println("Email: " + email);
+            if (rs.next()) {
+                int friendID = rs.getInt("u_id");
+
+                // print info about friend
+                System.out.println("Username: " + getFriendUsername(friendID));
+                System.out.println("ID: " + friendID);
+                System.out.println("Name: " + getFriendFullName(friendID));
+                System.out.println("Email: " + email);
+            }
 
         }
         catch(Exception e){
