@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Class intended to handle all Collection related queries
@@ -243,9 +245,9 @@ public class Collections{
             return;
         }
         ResultSet rs = null;
-        Map<Integer, String> collectionMap = new HashMap<>();
+        Map<Integer, String> collectionMap = new LinkedHashMap<>();
         try (StarbugConnection cs = new StarbugConnection()) {
-            String query = "select * from \"Collection\" where u_id = " + u_id;
+            String query = "select * from \"Collection\" where u_id = " + u_id + " \n order by collection_name asc";
             rs = cs.doQuery(query);
             while (rs.next()) {
                 int c_id = rs.getInt("c_id");
