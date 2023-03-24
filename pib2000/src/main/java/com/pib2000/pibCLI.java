@@ -201,15 +201,23 @@ public class pibCLI {
                 switch(query){ // Search must include song’s name, the artist’s name, the album, the length and the listen count
                     case '1': // Search Artists
                         System.out.println("Search Artists");
+                        String artistName = r.readLine();
+                        SongSearch.searchArtist(artistName);
                         break;
                     case '2': // Search Album
                         System.out.println("Search Albums");
+                        String albumName = r.readLine();
+                        SongSearch.searchAlbum(albumName);
                         break;
                     case '3': // Search Songs
                         System.out.println("Search Songs");
-                        String searchTerm = r.readLine();
-                        SongSearch.searchName(searchTerm);
+                        String songName = r.readLine();
+                        SongSearch.searchName(songName);
                         break;
+                    case '4': // Search Genres
+                        System.out.println("Search Genres");
+                        String genreName = r.readLine();
+                        SongSearch.searchGenre(genreName);
                     case 'h':
                         searchHelpMessage();
                         break;
@@ -287,6 +295,7 @@ public class pibCLI {
         System.out.println( "1 - Search Artists\n" +
                 "2 - Search Albums\n" +
                 "3 - Search Songs\n" +
+                "4 - Search Genres\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
