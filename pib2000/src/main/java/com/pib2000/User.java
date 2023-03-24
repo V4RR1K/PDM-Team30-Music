@@ -148,7 +148,9 @@ public class User {
             return false;
         }
     }
-
+    public static boolean validateCredentials(String username, String password){
+        return true;
+    }
     public boolean loginUser(){
         this.lastAccess = generateDate();
         updateUser();

@@ -17,18 +17,63 @@ public class pibCLI {
         u_id = -1;
     }
 
-    private void userLogin(){
+    private void userLoginMenu() throws IOException{
+        System.out.println("");
+        char query;
+        boolean running = true;
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        while (running){
+            System.out.print("Search > ");
+            String input = r.readLine();
+            if (input.length() >= 1){
+                query = input.charAt(0);
+
+                switch(query){
+                    case '1':
+                        System.out.println("Login");
+                        break;
+                    case '2':
+                        System.out.println("Create Account");
+                        userCreate();
+                        break;
+                    case 'q':
+                        running = false;
+                        break;
+                    default:
+                            System.out.println("Please input a valid entry or press q to quit");
+                        break;
+                }
+            }
+        }
+    }
+    private void userLogin() throws IOException{
+
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         // Request user/pass
-        System.out.println("Username: ");
-        System.out.println("Password: ");
+        System.out.print("Username> ");
+        String username = r.readLine();
+        System.out.println("Password> ");
+        String password = r.readLine();
 
-        // Add user login time
-        Date currTime = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = format.format(currTime);
+        // Query for username and password
 
-        // yyyy-mm-dd: lastaccessdate or creationdate
-        // If user created an account record the time they created
+    }
+
+    private User userCreate() throws IOException {
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        // Request user/pass
+        System.out.print("Username > ");
+        String username = r.readLine();
+        System.out.println("Password > ");
+        String password = r.readLine();
+        System.out.println("Firstname > ");
+        String firstname = r.readLine();
+        System.out.println("Lastname > ");
+        String lastname = r.readLine();
+        System.out.println("Email > ");
+        String email = r.readLine();
+
+        return new User (username, password, firstname, lastname, email);
     }
     private void collectionMenu() throws IOException {
         System.out.println("Welcome to the collection menu");
