@@ -248,6 +248,8 @@ public class pibCLI {
                         break;
                     case '2': // Search Friend
                         System.out.println("Search Friend");
+                        String friendEmail = r.readLine();
+                        Following.searchFriend(friendEmail);
                         break;
                     case '3': // Edit Friends
                         System.out.println("Editing Friends");

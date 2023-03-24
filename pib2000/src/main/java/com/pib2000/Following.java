@@ -35,12 +35,29 @@ public class Following {
 
     }
 
-    public static String getFriendName(int friend_id){
+    public static String getFriendUsername(int friend_id){
         try (StarbugConnection cs = new StarbugConnection()){
-            String query = "select name from \"User\" where u_id = " + friend_id;
+            String query = "select username from \"User\" where u_id = " + friend_id;
             ResultSet rs = cs.doQuery(query);
             if(rs.next()){
-                return rs.getString("name");
+                return rs.getString("username");
+            }
+            return "";
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getFriendFullName (int friend_id){
+        try (StarbugConnection cs = new StarbugConnection()){
+            String query = "select firstname, lastname from \"User\" where u_id = " + friend_id;
+            ResultSet rs = cs.doQuery(query);
+            if(rs.next()){
+                String first = rs.getString("firstname");
+                String last = rs.getString("lastname");
+                return first + " " + last;
             }
             return "";
         }
@@ -85,7 +102,7 @@ public class Following {
             rs = cs.doQuery(query);
             while(rs.next()){
                 int friend_id = rs.getInt("follows");
-                String friendName = getFriendName(friend_id);
+                String friendName = getFriendUsername(friend_id);
                 friendsMap.put(friend_id, friendName);
 
             }
@@ -99,5 +116,24 @@ public class Following {
             String currentFriendName = friendsMap.get(currentFriendID);
             System.out.println("Username: " + currentFriendName + ", ID: " + currentFriendID);
         }
+    }
+
+    public static void searchFriend(String email){
+        try (StarbugConnection cs = new StarbugConnection()){
+            String query = "select u_id from \"User\" where email = " + email;
+            ResultSet rs = cs.doQuery(query);
+            int friendID = rs.getInt("u_id");
+
+            // print info about friend
+            System.out.println("Username: " + getFriendUsername(friendID));
+            System.out.println("ID: " + friendID);
+            System.out.println("Name: " + getFriendFullName(friendID));
+            System.out.println("Email: " + email);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
