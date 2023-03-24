@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class intended to handle all Collection related queries
@@ -241,27 +243,52 @@ public class Collections{
             return;
         }
         ResultSet rs = null;
+        Map<Integer, String> collectionMap = new HashMap<>();
         try (StarbugConnection cs = new StarbugConnection()) {
             String query = "select * from \"Collection\" where u_id = " + u_id;
             rs = cs.doQuery(query);
             while (rs.next()) {
                 int c_id = rs.getInt("c_id");
-                String collection_name = rs.getString("name");
-                System.out.println("Collection: " + collection_name);
-                int num_songs = 0;
-                int duration_minutes = 0;
-                int s_id = 0;
-                ResultSet rs_num_songs = cs.doQuery("select count (*) from \"Songs_In_Collection\"" +
-                        " where c_id =" + c_id);
-                num_songs = rs_num_songs.getInt("count");
-                System.out.println("Number of Songs: " + num_songs);
-                ResultSet rs_duration_minutes = cs.doQuery("count length from \"Song\"" +
-                        " where s_id = " + s_id);
-                System.out.println("Duration, in Minutes: " + duration_minutes);
-                System.out.println();
+                String collection_name = rs.getString("collection_name");
+                collectionMap.put(c_id, collection_name);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        for (int i : collectionMap.keySet()) {
+            int c_id = i;
+            String collection_name = collectionMap.get(i);
+            System.out.println("Collection: " + collection_name);
+            int num_songs = 0;
+            int duration_minutes = 0;
+            int s_id = 0;
+            try (StarbugConnection cs2 = new StarbugConnection()) {
+                ResultSet rs_num_songs = cs2.doQuery("select count(*) from \"Song_in_collection\"" +
+                        " where c_id =" + c_id);
+                if (rs_num_songs.next()) {
+                    num_songs = rs_num_songs.getInt("count");
+                }
+                else {
+                    continue; //no need to count the song length if there are no songs!
+                }
+                System.out.println("Number of Songs: " + num_songs);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try (StarbugConnection cs3 = new StarbugConnection()) {
+                ResultSet rs_duration_minutes = cs3.doQuery("select extract(hour from (select sum(length)\n" +
+                        "            from \"Song\" s\n" +
+                        "            where s.s_id in (select s_id from \"Song_in_collection\" where c_id = " + c_id + "))) as minutes");
+                if (rs_duration_minutes.next()) {
+                    duration_minutes = rs_duration_minutes.getInt("minutes");
+                }
+                System.out.println("Duration, in Minutes: " + duration_minutes);
+                System.out.println();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

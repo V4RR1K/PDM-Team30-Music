@@ -13,17 +13,15 @@ public class pibCLI {
 
     public pibCLI(){
         System.out.println("Welcome to pib2000 music");
-        // Call user login
-        u_id = -1;
     }
 
-    private void userLoginMenu() throws IOException{
+    public void userLoginMenu() throws IOException{
         System.out.println("");
         char query;
         boolean running = true;
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         while (running){
-            System.out.print("Search > ");
+            System.out.print("LoginMenu > ");
             String input = r.readLine();
             if (input.length() >= 1){
                 query = input.charAt(0);
@@ -31,6 +29,7 @@ public class pibCLI {
                 switch(query){
                     case '1':
                         System.out.println("Login");
+                        userLogin();
                         break;
                     case '2':
                         System.out.println("Create Account");
@@ -52,11 +51,17 @@ public class pibCLI {
         // Request user/pass
         System.out.print("Username> ");
         String username = r.readLine();
-        System.out.println("Password> ");
+        System.out.print("Password> ");
         String password = r.readLine();
 
         // Query for username and password
-
+        int loginResult = User.validateCredentials(username, password);
+        if (loginResult >= 0){
+            this.u_id = loginResult;
+            System.out.println("Logging you in. Welcome back!");
+        } else {
+            System.out.println("Invalid Credentials, please try again or create an account");
+        }
     }
 
     private User userCreate() throws IOException {
@@ -88,7 +93,8 @@ public class pibCLI {
                 // Get user input
                 switch(query){
                     case '1': // View Collections (Must show (Name, NumSongs, TotalDuration)
-                        System.out.println("View");
+                        System.out.println("View:");
+                        Collections.displayCollections(u_id);
                         break;
                     case '2': // Edit Collections (Edit Name, delete, add, delete, add song, add album, delete song, delete album)
                         System.out.println("Editing");
