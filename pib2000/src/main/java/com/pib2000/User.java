@@ -17,8 +17,10 @@ public class User {
     private String firstname;
     private String lastname;
     private String email;
-    private Date creationDate;
-    private Date lastAccess;
+    private long creationDate;
+    private Date uploadCreationDate;
+    private long lastAccess;
+    private Date uploadLastAccessDate;
 
     private final String[] column_names = {"u_id",
             "username",
@@ -43,14 +45,13 @@ public class User {
 
         createUser(this.username, this.password, this.firstname, this.lastname, this.email);
     }
-    private Date generateDate(){
+    private Long generateDate(){
         Date d = new Date();
-        return d;
+        return d.getTime();
     }
 
-    private String generateDateString(Date date){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
+    private java.sql.Date generateSqlDate(Long date){
+        return new java.sql.Date(date);
     }
 
     private int nextId(){
@@ -82,15 +83,17 @@ public class User {
                 + column_names[3] + ", "
                 + column_names[4] + ", "
                 + column_names[5] + ", "
-                + column_names[6] + ") "
+                + column_names[6] + ", "
+                + column_names[7] + ") "
                 + "VALUES("
                 + this.nextId() + ", "
-                + "\"" + this.username + "\"" + ", "
-                + "\"" + this.password + "\"" +  ", "
-                + "\"" + this.firstname + "\"" + ", "
-                + "\"" + this.lastname + "\"" + ", "
-                + "\"" + this.email + "\"" + ", "
-                + generateDateString(this.creationDate) + ");";
+                + "'" + this.username + "'" + ", "
+                + "'" + this.password + "'" +  ", "
+                + "'" + this.firstname + "'" + ", "
+                + "'" + this.lastname + "'" + ", "
+                + "'" + this.email + "'" + ", "
+                + "'" + generateSqlDate(this.creationDate) + "'" + ", "
+                + "'" + generateSqlDate(this.creationDate) + "'" +");";
 
         System.out.println(query);
 
@@ -103,16 +106,20 @@ public class User {
         }
     }
 
-    public User updateUser(int id, User user){
+    public User updateUser(){
         try (StarbugConnection connection = new StarbugConnection()){
-            return null;
+            String query = "UPDATE \"User\" SET "
+                    + column_names[7] + " = " + "'" + generateSqlDate(this.lastAccess) + "'"
+                    + "WHERE u_id = " + id;
+            connection.doUpdate(query);
+            return this;
         } catch (Exception e){
             e.printStackTrace();
             return null;
         }
     }
 
-    public void loadUser(int id ){
+    private void loadUser( int id ){
         try (StarbugConnection connection = new StarbugConnection()){
             String query = "SELECT * FROM \"User\" WHERE u_id = " + id;
             ResultSet result = connection.doQuery(query);
@@ -124,17 +131,17 @@ public class User {
                 this.firstname = result.getString(column_names[3]);
                 this.lastname = result.getString(column_names[4]);
                 this.email = result.getString(column_names[5]);
-                this.creationDate = result.getDate(column_names[6]);
+                this.uploadCreationDate = result.getDate(column_names[6]);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public boolean deleteUser( int id ){
+    public static boolean deleteUser( int id ){
         try (StarbugConnection connection = new StarbugConnection()){
-            String query = "DELETE * FROM \"User\" WHERE u_id = " + id;
-            connection.doQuery(query);
+            String query = "DELETE FROM \"User\" WHERE u_id = " + id;
+            connection.doUpdate(query);
             return true;
         } catch (Exception e){
             e.printStackTrace();
@@ -144,7 +151,7 @@ public class User {
 
     public boolean loginUser(){
         this.lastAccess = generateDate();
-        updateUser(this.id, this);
+        updateUser();
         return true;
     }
 
@@ -166,9 +173,10 @@ public class User {
     public static void main(String[] args){
 //        User existing = new User(1);
 //        System.out.println(existing);
-        User newUser = new User("GregLynskey", "fish",
-                "Greg", "Lynskey", "gcl5615@rit.edu");
+        User newUser = new User("GregLynskey", "fish", "Greg", "Lynskey", "gcl5615@rit.edu");
+        newUser.loginUser();
 
+        System.out.println(newUser);
 
     }
 }
