@@ -17,7 +17,7 @@ public class Following {
         this.follows = following_id;
     }
 
-    private static int getFollowingID(int user_id){
+    public static int getFollowingID(int user_id){
         try (StarbugConnection cs = new StarbugConnection()){
             String query = "select follows from \"Following\" where u_id = " + user_id;
             ResultSet rs = cs.doQuery(query);
@@ -33,7 +33,7 @@ public class Following {
 
     }
 
-    private static void addUserToFollowing(int user_id, int following_id){
+    public static void addUserToFollowing(int user_id, int following_id){
         try (StarbugConnection cs = new StarbugConnection()){
             String query = "insert into \"Following\" (SELECT " + user_id + ", " + following_id;
             int rs = cs.doUpdate(query);
@@ -43,7 +43,7 @@ public class Following {
         }
     }
 
-    private static void removeUserFromFollowing(int user_id, int following_id){
+    public static void removeUserFromFollowing(int user_id, int following_id){
         try (StarbugConnection cs = new StarbugConnection ()){
             String query = "delete from \"Following\" where u_id = " + user_id + " and follows = " + following_id;
             int rs = cs.doUpdate(query);
