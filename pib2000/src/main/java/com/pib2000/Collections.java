@@ -306,6 +306,24 @@ public class Collections{
             String query = "insert into \"Listened_to\" (select " + u_id + ", s_id, current_timestamp from \"Song_in_collection\" where u_id = " +
                     u_id + " and c_id = " + collectionId + ")";
             int rs = sc.doUpdate(query);
+            if (rs != 0) {
+                System.out.println("Listened to all songs in " + collection_name);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void playSong(int u_id, String song_name) {
+        int songId = getSongId(song_name);
+        try (StarbugConnection sc = new StarbugConnection()) {
+            String query = "insert into \"Listened_to\" (select " + u_id + ", s_id, current_timestamp from \"Song\" where s_id = " +
+                    songId + ")";
+            int rs = sc.doUpdate(query);
+            if (rs != 0) {
+                System.out.println("Listened to " + song_name);
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
