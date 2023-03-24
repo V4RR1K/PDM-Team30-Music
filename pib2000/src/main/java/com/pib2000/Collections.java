@@ -4,10 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Class intended to handle all Collection related queries
@@ -41,6 +38,15 @@ public class Collections{
             e.printStackTrace();
             return -1;
         }
+    }
+
+    private static Long generateDate(){
+        Date d = new Date();
+        return d.getTime();
+    }
+
+    private static java.sql.Timestamp generateSqlTimestamp(Long date) {
+        return new java.sql.Timestamp(date);
     }
 
     private static int getAlbumId(String albumName) {
@@ -291,6 +297,18 @@ public class Collections{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void playCollection(int u_id, String collection_name) {
+        int collectionId = getCollectionId(u_id, collection_name);
+        try (StarbugConnection sc = new StarbugConnection()) {
+            String query = "insert into \"Listened_to\" (select " + u_id + ", s_id, current_timestamp from \"Song_in_collection\" where u_id = " +
+                    u_id + " and c_id = " + collectionId + ")";
+            int rs = sc.doUpdate(query);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

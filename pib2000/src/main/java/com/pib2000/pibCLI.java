@@ -170,6 +170,8 @@ public class pibCLI {
                         break;
                     case '3': // Play Collection (Play song or play entire collection)
                         System.out.println("Play");
+                        String c_name = r.readLine();
+                        Collections.playCollection(u_id, c_name);
                         break;
                     case 'h':
                         collectionHelpMessage();
@@ -361,6 +363,7 @@ public class pibCLI {
                     case '3':
                         friendsMenu();
                         break;
+
                     case 'h':
                         helpMessage();
                         break;
