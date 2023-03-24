@@ -153,7 +153,7 @@ public class User {
             String query = "SELECT u_id FROM \"User\" WHERE username = '" + username + "' AND password = '" + password + "'";
             ResultSet rs = connection.doQuery(query);
             if (rs.next()) {
-                return rs.getInt(0);
+                return rs.getInt(1);
             }
             return -1;
         } catch (Exception e){

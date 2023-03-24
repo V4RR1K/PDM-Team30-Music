@@ -11,7 +11,7 @@ import java.util.Date;
 public class pibCLI {
     int u_id ;
 
-    public pibCLI() throws IOException{
+    public pibCLI(){
         System.out.println("Welcome to pib2000 music");
     }
 
@@ -21,7 +21,7 @@ public class pibCLI {
         boolean running = true;
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         while (running){
-            System.out.print("Search > ");
+            System.out.print("LoginMenu > ");
             String input = r.readLine();
             if (input.length() >= 1){
                 query = input.charAt(0);
@@ -51,13 +51,14 @@ public class pibCLI {
         // Request user/pass
         System.out.print("Username> ");
         String username = r.readLine();
-        System.out.println("Password> ");
+        System.out.print("Password> ");
         String password = r.readLine();
 
         // Query for username and password
         int loginResult = User.validateCredentials(username, password);
         if (loginResult >= 0){
             this.u_id = loginResult;
+            System.out.println("Logging you in. Welcome back!");
         } else {
             System.out.println("Invalid Credentials, please try again or create an account");
         }
