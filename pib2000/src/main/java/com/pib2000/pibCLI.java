@@ -92,7 +92,8 @@ public class pibCLI {
                 // Get user input
                 switch(query){
                     case '1': // View Collections (Must show (Name, NumSongs, TotalDuration)
-                        System.out.println("View");
+                        System.out.println("View:");
+                        Collections.displayCollections(u_id);
                         break;
                     case '2': // Edit Collections (Edit Name, delete, add, delete, add song, add album, delete song, delete album)
                         System.out.println("Editing");
