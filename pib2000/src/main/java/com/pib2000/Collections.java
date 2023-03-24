@@ -40,15 +40,6 @@ public class Collections{
         }
     }
 
-    private static Long generateDate(){
-        Date d = new Date();
-        return d.getTime();
-    }
-
-    private static java.sql.Timestamp generateSqlTimestamp(Long date) {
-        return new java.sql.Timestamp(date);
-    }
-
     private static int getAlbumId(String albumName) {
         try (StarbugConnection cs = new StarbugConnection()) {
             String query = "select al_id from \"Album\" where albumname = \'" + albumName + "\'";

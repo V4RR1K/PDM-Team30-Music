@@ -227,6 +227,7 @@ public class pibCLI {
         char query;
         boolean running = true;
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        String filterString;
         while (running){
             System.out.print("Search > ");
             String input = r.readLine();
@@ -237,22 +238,26 @@ public class pibCLI {
                     case '1': // Search Artists
                         System.out.println("Search Artists");
                         String artistName = r.readLine();
-                        SongSearch.searchArtist(artistName);
+                        filterString = sortFilter();
+                        SongSearch.searchArtist(artistName, filterString);
                         break;
                     case '2': // Search Album
                         System.out.println("Search Albums");
                         String albumName = r.readLine();
-                        SongSearch.searchAlbum(albumName);
+                        filterString = sortFilter();
+                        SongSearch.searchAlbum(albumName, filterString);
                         break;
                     case '3': // Search Songs
                         System.out.println("Search Songs");
                         String songName = r.readLine();
-                        SongSearch.searchName(songName);
+                        filterString = sortFilter();
+                        SongSearch.searchName(songName, filterString);
                         break;
                     case '4': // Search Genres
                         System.out.println("Search Genres");
                         String genreName = r.readLine();
-                        SongSearch.searchGenre(genreName);
+                        filterString = sortFilter();
+                        SongSearch.searchGenre(genreName, filterString);
                     case 'h':
                         searchHelpMessage();
                         break;
@@ -265,6 +270,14 @@ public class pibCLI {
                 }
             }
         }
+    }
+
+    private String sortFilter() throws IOException {
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Specific sorting criteria? Press enter to skip or type in any of the following options:");
+        System.out.println("songName\nartist\nalbum\ngenre");
+        System.out.println("ex. songName true = sort by name of song in descending order, artist false = sort by name of artist in ascending order");
+        return r.readLine();
     }
 
     private void friendsMenu() throws IOException{
