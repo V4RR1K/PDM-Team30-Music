@@ -9,6 +9,7 @@ import java.sql.Statement;
  *
  * @author Andromeda Sawtelle [andromeda.sawtelle@gmail.com]
  * @author Roshan Nunna
+ * @author Lily O'Carroll [lso2973@rit.edu]
  */
 
 public class Collections{
@@ -231,5 +232,35 @@ public class Collections{
             e.printStackTrace();
         }
 
+    }
+
+    public static void displayCollections(int u_id) {
+        if (u_id < 0) {
+            System.out.println("Not logged in. Login/create an account");
+            return;
+        }
+        ResultSet rs = null;
+        try (StarbugConnection cs = new StarbugConnection()) {
+            String query = "select * from \"Collection\" where u_id = " + u_id;
+            rs = cs.doQuery(query);
+            while (rs.next()) {
+                int c_id = rs.getInt("c_id");
+                String collection_name = rs.getString("name");
+                System.out.println("Collection: " + collection_name);
+                int num_songs = 0;
+                int duration_minutes = 0;
+                int s_id = 0;
+                ResultSet rs_num_songs = cs.doQuery("select count (*) from \"Songs_In_Collection\"" +
+                        " where c_id =" + c_id);
+                num_songs = rs_num_songs.getInt("count");
+                System.out.println("Number of Songs: " + num_songs);
+                ResultSet rs_duration_minutes = cs.doQuery("count length from \"Song\"" +
+                        " where s_id = " + s_id);
+                System.out.println("Duration, in Minutes: " + duration_minutes);
+                System.out.println();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
