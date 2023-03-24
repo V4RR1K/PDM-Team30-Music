@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class pibCLI {
     int u_id ;
+    boolean notLoggedIn = true;
 
     public pibCLI(){
         System.out.println("Welcome to pib2000 music");
@@ -20,7 +21,7 @@ public class pibCLI {
         char query;
         boolean running = true;
         BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
-        while (running){
+        while (running && notLoggedIn){
             System.out.print("LoginMenu > ");
             String input = r.readLine();
             if (input.length() >= 1){
@@ -58,6 +59,7 @@ public class pibCLI {
         int loginResult = User.validateCredentials(username, password);
         if (loginResult >= 0){
             this.u_id = loginResult;
+            this.notLoggedIn = false;
             System.out.println("Logging you in. Welcome back!");
         } else {
             System.out.println("Invalid Credentials, please try again or create an account");
@@ -69,13 +71,13 @@ public class pibCLI {
         // Request user/pass
         System.out.print("Username > ");
         String username = r.readLine();
-        System.out.println("Password > ");
+        System.out.print("Password > ");
         String password = r.readLine();
-        System.out.println("Firstname > ");
+        System.out.print("Firstname > ");
         String firstname = r.readLine();
-        System.out.println("Lastname > ");
+        System.out.print("Lastname > ");
         String lastname = r.readLine();
-        System.out.println("Email > ");
+        System.out.print("Email > ");
         String email = r.readLine();
 
         return new User (username, password, firstname, lastname, email);

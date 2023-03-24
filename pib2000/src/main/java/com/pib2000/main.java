@@ -6,6 +6,6 @@ public class main {
     public static void main(String[] args) throws IOException {
         pibCLI cli = new pibCLI();
         cli.userLoginMenu();
-        //cli.run();
+        cli.run();
     }
 }

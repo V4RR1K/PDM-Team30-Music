@@ -95,7 +95,7 @@ public class User {
                 + "'" + generateSqlDate(this.creationDate) + "'" + ", "
                 + "'" + generateSqlDate(this.creationDate) + "'" +");";
 
-        System.out.println(query);
+        // System.out.println(query);
 
         try (StarbugConnection connection = new StarbugConnection()){
             connection.doUpdate(query);
