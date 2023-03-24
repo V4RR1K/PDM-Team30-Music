@@ -148,8 +148,18 @@ public class User {
             return false;
         }
     }
-    public static boolean validateCredentials(String username, String password){
-        return true;
+    public static int validateCredentials(String username, String password){
+        try (StarbugConnection connection = new StarbugConnection()){
+            String query = "SELECT u_id FROM \"User\" WHERE username = '" + username + "' AND password = '" + password + "'";
+            ResultSet rs = connection.doQuery(query);
+            if (rs.next()) {
+                return rs.getInt(0);
+            }
+            return -1;
+        } catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
     public boolean loginUser(){
         this.lastAccess = generateDate();

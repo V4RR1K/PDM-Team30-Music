@@ -11,13 +11,11 @@ import java.util.Date;
 public class pibCLI {
     int u_id ;
 
-    public pibCLI(){
+    public pibCLI() throws IOException{
         System.out.println("Welcome to pib2000 music");
-        // Call user login
-        u_id = -1;
     }
 
-    private void userLoginMenu() throws IOException{
+    public void userLoginMenu() throws IOException{
         System.out.println("");
         char query;
         boolean running = true;
@@ -31,6 +29,7 @@ public class pibCLI {
                 switch(query){
                     case '1':
                         System.out.println("Login");
+                        userLogin();
                         break;
                     case '2':
                         System.out.println("Create Account");
@@ -56,7 +55,12 @@ public class pibCLI {
         String password = r.readLine();
 
         // Query for username and password
-
+        int loginResult = User.validateCredentials(username, password);
+        if (loginResult >= 0){
+            this.u_id = loginResult;
+        } else {
+            System.out.println("Invalid Credentials, please try again or create an account");
+        }
     }
 
     private User userCreate() throws IOException {
