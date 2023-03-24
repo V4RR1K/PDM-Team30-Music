@@ -60,6 +60,8 @@ public class pibCLI {
         if (loginResult >= 0){
             this.u_id = loginResult;
             this.notLoggedIn = false;
+            User u = new User(u_id);
+            u.loginUser();
             System.out.println("Logging you in. Welcome back!");
         } else {
             System.out.println("Invalid Credentials, please try again or create an account");
@@ -170,6 +172,40 @@ public class pibCLI {
                         break;
                     case '3': // Play Collection (Play song or play entire collection)
                         System.out.println("Play");
+                        boolean play_running = true;
+                        while(play_running) {
+                            System.out.print("Play > ");
+                            String play_input = r.readLine();
+                            if (play_input.length() > 0) {
+                                switch (play_input) {
+                                    case "collection":
+                                        System.out.print("\nCollection name > ");
+                                        String c_name = r.readLine();
+                                        if (c_name.length() < 1) {
+                                            System.out.println("Please provide a collection next time");
+                                            break;
+                                        }
+                                        Collections.playCollection(u_id, c_name);
+                                        break;
+                                    case "song":
+                                        System.out.print("\nSong name > ");
+                                        String s_name = r.readLine();
+                                        if (s_name.length() < 1) {
+                                            System.out.println("Please provide a song next time");
+                                            break;
+                                        }
+                                        Collections.playSong(u_id, s_name);
+                                        break;
+                                    case "q":
+                                        play_running = false;
+                                        break;
+                                    default:
+                                        System.out.println("Please provide a proper input");
+                                        play_running = false;
+                                        break;
+                                }
+                            }
+                        }
                         break;
                     case 'h':
                         collectionHelpMessage();
@@ -378,6 +414,7 @@ public class pibCLI {
                     case '3':
                         friendsMenu();
                         break;
+
                     case 'h':
                         helpMessage();
                         break;
