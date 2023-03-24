@@ -186,7 +186,6 @@ public class pibCLI {
     }
 
 
-
     private void searchMenu() throws IOException{
         System.out.println("Welcome to the search menu");
         char query;
@@ -236,13 +235,42 @@ public class pibCLI {
                 // Get user input
                 switch(query){
                     case '1': // View Friends
-                        System.out.println("View");
+                        System.out.println("View:");
+                        Following.displayFriends(u_id);
                         break;
                     case '2': // Search Friend
                         System.out.println("Search Friend");
                         break;
-                    case '3': // Remove Friend
-                        System.out.println("Remove Friend");
+                    case '3': // Edit Friends
+                        System.out.println("Editing Friends");
+                        boolean edit_friends_running = true;
+                        while(edit_friends_running){
+                            System.out.print("Friends Edit >");
+                            String editF_input = r.readLine();
+                            String[] editF_cmd = editF_input.split(" ");
+                            if(editF_cmd.length >= 1){
+                                switch (editF_cmd[0]){
+                                    case "add":
+                                        if(editF_cmd.length < 2){
+                                            System.out.println("Usage: add [friend ID]");
+                                            System.out.println("Please input a valid command or press \'h\' to view menu options");
+                                            break;
+                                        }
+                                        Following.addUserToFollowing(u_id, Integer.parseInt(editF_cmd[1]));
+                                        break;
+
+                                    case "del":
+                                        if(editF_cmd.length < 2){
+                                            System.out.println("Usage: del [friend ID]");
+                                            System.out.println("Please input a valid command or press \'h\' to view menu options");
+                                            break;
+                                        }
+                                        Following.removeUserFromFollowing(u_id, Integer.parseInt(editF_cmd[1]));
+                                        break;
+                                }
+                            }
+
+                        }
                         break;
                     case 'h':
                         friendHelpMessage();
@@ -294,7 +322,7 @@ public class pibCLI {
     private void friendHelpMessage(){
         System.out.println( "1 - View Friends\n" +
                 "2 - Search Friends\n" +
-                "3 - Remove Friends\n" +
+                "3 - Edit Friends\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
