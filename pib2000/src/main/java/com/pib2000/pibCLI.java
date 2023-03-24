@@ -207,6 +207,8 @@ public class pibCLI {
                         break;
                     case '3': // Search Songs
                         System.out.println("Search Songs");
+                        String searchTerm = r.readLine();
+                        SongSearch.searchName(searchTerm);
                         break;
                     case 'h':
                         searchHelpMessage();

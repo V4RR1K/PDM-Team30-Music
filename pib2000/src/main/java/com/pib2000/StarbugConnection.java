@@ -14,7 +14,8 @@ import java.util.Properties;
  */
 public class StarbugConnection implements AutoCloseable {
     public Connection conn = null;
-    public Session session = null;
+    private static Session session = null;
+    private static int assigned_port = 0;
     public Statement stmt = null;
     public ResultSet rs = null;
 
@@ -55,15 +56,17 @@ public class StarbugConnection implements AutoCloseable {
         String databaseName = System.getenv("DBNAME"); //change to your database name
         String driverName = "org.postgresql.Driver";
         try {
-            Properties config = new Properties();
-            config.put("StrictHostKeyChecking", "no");
-            JSch jsch = new JSch();
-            session = jsch.getSession(user, rhost, 22);
-            session.setPassword(password);
-            session.setConfig(config);
-            session.setConfig("PreferredAuthentications","publickey,keyboard-interactive,password");
-            session.connect();
-            int assigned_port = session.setPortForwardingL(lport, "localhost", rport);
+            if (session == null || !session.isConnected()) {
+                Properties config = new Properties();
+                config.put("StrictHostKeyChecking", "no");
+                JSch jsch = new JSch();
+                session = jsch.getSession(user, rhost, 22);
+                session.setPassword(password);
+                session.setConfig(config);
+                session.setConfig("PreferredAuthentications","publickey,keyboard-interactive,password");
+                session.connect();
+                assigned_port = session.setPortForwardingL(lport, "localhost", rport);
+            }
 
             // Assigned port could be different from 5432 but rarely happens
             String url = "jdbc:postgresql://localhost:"+ assigned_port + "/" + databaseName;
