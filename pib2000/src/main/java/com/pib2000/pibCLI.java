@@ -16,6 +16,11 @@ public class pibCLI {
         System.out.println("Welcome to pib2000 music");
     }
 
+    private void userHelp() {
+        System.out.println("1 - Login");
+        System.out.println("2 - Create Account");
+    }
+
     public void userLoginMenu() throws IOException{
         System.out.println("");
         char query;
@@ -35,6 +40,9 @@ public class pibCLI {
                     case '2':
                         System.out.println("Create Account");
                         userCreate();
+                        break;
+                    case 'h':
+                        userHelp();
                         break;
                     case 'q':
                         running = false;
@@ -375,6 +383,11 @@ public class pibCLI {
                 "add [name] - Add Collection\n" +
                 "del [name] - Delete Collection\n" +
                 "edit [name][new name] - Edit Collection Name\n" +
+                 "addAlbum [Collection_name] [Album_Name] - Add Album to Collection\n" +
+                        "addSong [Collection_name] [Song_Name] - Add Song to Collection\n" +
+                        "delAlbum [Collection_name] [Album_Name] - Delete Album from Collection\n" +
+                        "delSong [Collection_name] [Song_Name] - Delete Song from Collection\n" +
+
                 "h - Help\n"+
                 "q - Quit");
     }
@@ -402,9 +415,6 @@ public class pibCLI {
                 "del [friendID] - Delete Friend\n" +
                 "h - Help\n"+
                 "q - Quit");
-    }
-    private void play(String song){
-        // Record what song is played
     }
 
     public void run() throws IOException {
