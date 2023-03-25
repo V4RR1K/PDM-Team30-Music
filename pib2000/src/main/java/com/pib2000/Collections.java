@@ -122,7 +122,7 @@ public class Collections{
         int al_id = getAlbumId(albumName);
         try (StarbugConnection cs = new StarbugConnection()) {
             int rs = cs.doUpdate("delete from " +
-                    "\"Song_in_collection\" where u_id = " + u_id + " and c_id = " + c_id + " and s_id in (select s.s_id from \"Song_in_collection\" s where s.s_id = " + al_id + ")");
+                    "\"Song_in_collection\" where u_id = " + u_id + " and c_id = " + c_id + " and s_id in (select s.s_id from \"Song_in_album\" s where s.al_id = " + al_id + ")");
         }
         catch (Exception e) {
             e.printStackTrace();
