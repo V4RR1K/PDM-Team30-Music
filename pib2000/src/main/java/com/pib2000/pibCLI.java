@@ -361,10 +361,22 @@ public class pibCLI {
         }
     }
 
+    private void profileMenu() {
+
+        System.out.println("Profile > ");
+        // Literally print their data
+        System.out.println("\t Number of Collections:");
+        System.out.println("\t Number of Followers:");
+        System.out.println("\t Number of Following:");
+        System.out.println("\t Top 10 Artists:");
+
+    }
+
     private void helpMessage(){
         System.out.println( "1 - Collections\n" +
                 "2 - Search\n" +
                 "3 - Friends\n" +
+                "4 - Profile\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
@@ -436,7 +448,9 @@ public class pibCLI {
                     case '3':
                         friendsMenu();
                         break;
-
+                    case '4':
+                        profileMenu();
+                        break;
                     case 'h':
                         helpMessage();
                         break;
