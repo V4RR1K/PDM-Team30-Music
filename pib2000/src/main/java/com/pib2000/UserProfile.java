@@ -3,15 +3,33 @@ package com.pib2000;
 public class UserProfile {
     // Greg
     public static String numCollections(int userID){
-        return null;
+        try (StarbugConnection connection = new StarbugConnection()){
+            String query = "meow";
+            return "mwoe";
+        } catch (Exception e){
+            e.printStackTrace();
+            return "Error";
+        }
     }
     // Greg
     public static int numFollowers(int userID){
-        return -1;
+        try (StarbugConnection connection = new StarbugConnection()){
+            String query = "meow";
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
     // Greg
     public static int numFollowed(int userID){
-        return -1;
+        try (StarbugConnection connection = new StarbugConnection()){
+            String query = "meow";
+            return 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
     // Roshan
     public static String topTenArtistsByPlays(int userID){
