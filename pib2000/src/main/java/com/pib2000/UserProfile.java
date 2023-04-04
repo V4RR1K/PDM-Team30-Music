@@ -46,7 +46,21 @@ public class UserProfile {
                 "group by a.\"Name\"\n" +
                 "order by count(a.ar_id) desc\n" +
                 "limit 10";
-        return null;
+        StringBuilder sb = new StringBuilder();
+        try (StarbugConnection conn = new StarbugConnection()) {
+            ResultSet rs = conn.doQuery(query);
+
+            while (rs.next()) {
+                sb.append(rs.getString("Name"));
+                sb.append(" ");
+                sb.append(rs.getString("count"));
+                sb.append("\n");
+            }
+
+            return sb.toString();
+        }
+        catch (Exception e) {}
+        return sb.toString();
     }
     // Roshan
     public static String topTenArtistsByCollection(int userID){
@@ -61,7 +75,20 @@ public class UserProfile {
                 "group by a.\"Name\"\n" +
                 "order by count(a.ar_id) desc\n" +
                 "limit 10";
-        return null;
+        StringBuilder sb = new StringBuilder();
+        try (StarbugConnection conn = new StarbugConnection()) {
+            ResultSet rs = conn.doQuery(query);
+
+            while (rs.next()) {
+                sb.append(rs.getString("Name"));
+                sb.append(" ");
+                sb.append(rs.getString("count"));
+                sb.append("\n");
+            }
+            return sb.toString();
+        }
+        catch (Exception e) {}
+        return sb.toString();
     }
     // Andromeda
     public static String topTenArtistsByPlaysAndCollection(int userID){
