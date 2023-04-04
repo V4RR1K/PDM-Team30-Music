@@ -36,10 +36,21 @@ public class UserProfile {
     }
     // Roshan
     public static String topTenArtistsByPlays(int userID){
+        String query = "select distinct(a.\"Name\"), count(a.ar_id)\n" +
+                "from \"Listened_to\" lt\n" +
+                "inner join \"Produces_s\" ps\n" +
+                "on lt.s_id = ps.s_id\n" +
+                "inner join \"Artist\" a\n" +
+                "on ps.ar_id = a.ar_id\n" +
+                "where lt.u_id = " + userID + "\n" +
+                "group by a.\"Name\"\n" +
+                "order by count(a.ar_id) desc\n" +
+                "limit 10";
         return null;
     }
     // Roshan
     public static String topTenArtistsByCollection(int userID){
+        //top 10 artists by additions to collection
         return null;
     }
     // Andromeda
