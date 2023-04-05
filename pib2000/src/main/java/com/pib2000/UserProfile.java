@@ -4,13 +4,20 @@ import java.sql.ResultSet;
 
 public class UserProfile {
     // Andromeda
-    public static String numCollections(int userID){
-        try (StarbugConnection connection = new StarbugConnection()){
-            String query = "meow";
-            return "mwoe";
+    public static int numCollections(int userID){
+        try (StarbugConnection conn = new StarbugConnection()){
+            String query = "select count(c_id)\n" +
+                    "from \"Collection\"\n" +
+                    "where u_id = " + userID;
+            ResultSet rs = conn.doQuery(query);
+            int count = 1;
+            while(rs.next()){
+                count = rs.getInt("count");
+            }
+            return count;
         } catch (Exception e){
             e.printStackTrace();
-            return "Error";
+            return -1;
         }
     }
     // Greg
@@ -97,6 +104,6 @@ public class UserProfile {
 
 
     public static void main(String[] args){
-        System.out.println(numFollowed(2));
+        System.out.println(numCollections(3));
     }
 }
