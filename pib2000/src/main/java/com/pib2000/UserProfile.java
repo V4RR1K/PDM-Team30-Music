@@ -25,10 +25,15 @@ public class UserProfile {
             return -1;
         }
     }
+
     // Greg
     public static int numFollowers(int userID){
         try (StarbugConnection connection = new StarbugConnection()){
-            //String query = "select follows from \"Follows\" where u_id = " + userID;
+            String query = "select COUNT(u_id) from \"Follows\" where follows = " + userID;
+            ResultSet rs = connection.doQuery(query);
+            if (rs.next()){
+                return rs.getInt("count");
+            }
             return 0;
         } catch (Exception e){
             e.printStackTrace();
@@ -38,9 +43,12 @@ public class UserProfile {
     // Greg
     public static int numFollowed(int userID){
         try (StarbugConnection connection = new StarbugConnection()){
-            String query = "select follows from \"Follows\" where u_id = " + userID;
+            String query = "select COUNT(follows) from \"Follows\" where u_id = " + userID;
             ResultSet rs = connection.doQuery(query);
-            return rs.getFetchSize();
+            if (rs.next()){
+                return rs.getInt("count");
+            }
+            return 0;
         } catch (Exception e){
             e.printStackTrace();
             return -1;
@@ -172,10 +180,16 @@ public class UserProfile {
     }
 
     public static void main(String[] args){
-        System.out.println(topTenArtistsByCollection(2));
+
+        System.out.println(numFollowers(2));
         System.out.println();
-        System.out.println(topTenArtistsByPlays(2));
-        System.out.println();
-        System.out.println(topTenArtistsByPlaysAndCollection(2));
+        System.out.println(numFollowed(2));
+
+//        System.out.println(topTenArtistsByCollection(2));
+//        System.out.println();
+//        System.out.println(topTenArtistsByPlays(2));
+//        System.out.println();
+//        System.out.println(topTenArtistsByPlaysAndCollection(2));
+//
     }
 }
