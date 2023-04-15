@@ -35,8 +35,32 @@ public class Recommendation {
 
     //Andromeda
     public static String top50SongsOfFriends(int userID){
+        String query = "select distinct(s.name), count(s.s_id)\n" +
+                "from \"Follows\" fl\n" +
+                "inner join \"Listened_to\" lt on lt.u_id = fl.follows\n" +
+                "inner join  \"Song\" s on s.s_id = lt.s_id\n" +
+                "where fl.u_id = 2\n" +
+                "group by s.name\n" +
+                "order by count(s.s_id) desc\n" +
+                "limit 50;";
+        StringBuilder sb = new StringBuilder();
+        try (StarbugConnection conn = new StarbugConnection()) {
+            ResultSet rs = conn.doQuery(query);
 
-        return null;
+            int num = 1;
+            while (rs.next()) {
+                sb.append(num);
+                sb.append(": ");
+                sb.append(rs.getString("name"));
+                sb.append(" ");
+                sb.append(rs.getString("count"));
+                sb.append("\n");
+                num++;
+            }
+            return sb.toString();
+        }
+        catch (Exception e) {}
+        return sb.toString();
     }
 
     //Andromeda
@@ -71,6 +95,6 @@ public class Recommendation {
     }
 
     public static void main(String[] args){
-        System.out.println(top5GenresOfMonth());
+        System.out.println(top50SongsOfFriends(2));
     }
 }
