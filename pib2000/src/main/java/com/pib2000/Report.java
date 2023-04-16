@@ -8,7 +8,7 @@ public class Report {
         return;
     }
 
-    public static void frientToGenre(){
+    public static void friendToGenre(){
         return;
     }
     public static void popularArtistRating(){
