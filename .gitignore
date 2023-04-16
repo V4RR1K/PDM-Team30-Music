@@ -1,1 +1,3 @@
-/pib2000/.idea/
+.idea/
+pib2000/pib2000.iml
+pib2000/target/*
