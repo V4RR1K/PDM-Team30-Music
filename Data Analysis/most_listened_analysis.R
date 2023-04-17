@@ -38,5 +38,9 @@ genre_count_df <- genre_count_df[order(-genre_count_df$frequency),]
 # Get Top
 gc_top <- head(genre_count_df)
 
-ggplot(gc_top, aes(x=gc_top$genre, y=gc_top$frequency)) +
-  geom_bar(stat="identity")
+p <- ggplot(gc_top, aes(x=gc_top$genre, y=gc_top$frequency)) +
+        geom_bar(stat="identity", color="blue")
+titlestr <- paste("Most Popular Genre in" , target_year, sep=" ")
+
+p + labs(title=titlestr) + xlab("Genre") + ylab("Number of Listens") + theme_minimal()
+
