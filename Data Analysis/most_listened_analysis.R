@@ -23,7 +23,18 @@ most_listened <- data.frame(
 colnames(most_listened) <- c("year", "genre")
 
 # Parse out Target Year
-target_year <- 2020
+target_year <- 2022
+
+color <- "blue"
+
+if (target_year == 2020){
+  color <- "#a44b5e"
+} else if (target_year == 2021){
+  color <- "#27435c"
+} else if (target_year == 2022){
+  color <- "#19554b"
+}
+
 most_listened_year <- most_listened[most_listened$year == target_year,]
 
 # Get frequency
@@ -39,7 +50,7 @@ genre_count_df <- genre_count_df[order(-genre_count_df$frequency),]
 gc_top <- head(genre_count_df)
 
 p <- ggplot(gc_top, aes(x=gc_top$genre, y=gc_top$frequency)) +
-        geom_bar(stat="identity", color="blue")
+        geom_bar(stat="identity", fill=color)
 titlestr <- paste("Most Popular Genre in" , target_year, sep=" ")
 
 p + labs(title=titlestr) + xlab("Genre") + ylab("Number of Listens") + theme_minimal()
