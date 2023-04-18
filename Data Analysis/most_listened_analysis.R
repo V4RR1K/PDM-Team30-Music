@@ -7,7 +7,7 @@ library(lubridate)
 
 # - Most Listened to Genre By Year
 #   - Hypothesis: More sad music was listened to during covid
-#   - Data Needed: Top 5 Genres per Year
+#   - DataNeeded: Top 5 Genres per Year
 most_listened_raw <- read.csv("mostlistened_year.csv", header=TRUE)
 
 # Clean up year data
