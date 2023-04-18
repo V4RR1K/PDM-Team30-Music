@@ -361,6 +361,44 @@ public class pibCLI {
         }
     }
 
+    private void recommendationMenu() throws IOException {
+        char query;
+        boolean running = true;
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+        while (running) {
+            System.out.print("Recommend > ");
+            String input = r.readLine();
+            if (input.length() >= 1) {
+                query = input.charAt(0);
+                String result;
+                // Get user input
+                switch (query) {
+                    case '1':
+                        result = Recommendation.top50SongsFor30Days();
+                        System.out.println(result);
+                        break;
+                    case '2':
+                        result = Recommendation.top50SongsOfFriends(u_id);
+                        System.out.println(result);
+                        break;
+                    case '3':
+                        result = Recommendation.top5GenresOfMonth();
+                        System.out.println(result);
+                        break;
+                    case 'h':
+                        recommendHelpMessage();
+                        break;
+                    case 'q':
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Please input a valid or press \'h\' to view menu options");
+                        break;
+                }
+            }
+        }
+    }
+
     private void profileMenu() {
 
         System.out.println("Profile > ");
@@ -377,6 +415,7 @@ public class pibCLI {
                 "2 - Search\n" +
                 "3 - Friends\n" +
                 "4 - Profile\n" +
+                "5 - Recommendations\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
@@ -420,6 +459,14 @@ public class pibCLI {
                 "q - Quit");
     }
 
+    private void recommendHelpMessage(){
+        System.out.println( "1 - Top 50 Songs for 30 Days\n" +
+                "2 - Top 50 Songs of your Friends\n" +
+                "3 - Top 5 Genres of the Month\n" +
+                "h - Help\n"+
+                "q - Quit");
+    }
+
     private void friendEditHelpMessage(){
         System.out.println(
                 "add [friendID] - Add Friend\n" +
@@ -450,6 +497,9 @@ public class pibCLI {
                         break;
                     case '4':
                         profileMenu();
+                        break;
+                    case '5':
+                        recommendationMenu();
                         break;
                     case 'h':
                         helpMessage();
