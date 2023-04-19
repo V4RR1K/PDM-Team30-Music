@@ -30,8 +30,8 @@ artist_rating_aggregate <- aggregate(rating ~ artist, artist_rating_df, mean)
 plot_data <- merge(artist_counter_df, artist_rating_aggregate)
 
 # Scatter Plot ( x = listen Frequency, y = Average Rating )
-p <- ggplot(plot_data, aes(x=plot_data$frequency, y=plot_data$rating)) +
-  geom_point()
+p <- ggplot(plot_data, aes(x=frequency, y=rating)) +
+  geom_point() + geom_smooth(method="lm", se=FALSE)
 
 p + labs(title="Listens vs Rating Correlation") +
   xlab("Frequency") + ylab("Rating") + xlim(0,40) +ylim(0,5) + theme_minimal(base_size = 16)
