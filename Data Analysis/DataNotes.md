@@ -49,6 +49,8 @@ INNER JOIN "Genre" G on G.g_id = Gs.g_id
 ```
 
 ### Popular Artist Rating
+
+- Artist Rating
 ```postgresql
 select "Rate".s_id,
        "Rate".rating,
@@ -58,5 +60,13 @@ from "Rate"
 INNER JOIN "Produces_s" Ps on "Rate".s_id = Ps.s_id
 INNER JOIN "Artist" A on A.ar_id = Ps.ar_id
 ```
-
+- Artist Listen
+```postgresql
+select "Listened_to".listened_to_datetime,
+Ps.ar_id,
+A."Name"
+from "Listened_to"
+INNER JOIN "Produces_s" Ps on "Listened_to".s_id = Ps.s_id
+INNER JOIN "Artist" A on A.ar_id = Ps.ar_id
+```
   
