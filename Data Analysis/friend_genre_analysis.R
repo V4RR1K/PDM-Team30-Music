@@ -57,10 +57,10 @@ p_min <- ggplot(master_min, aes(x=master_min$genre, y=master_min$plays)) +
   geom_bar(stat="identity", fill="blue")
 
 p_min + labs(title="Low Follower Preferred Genre") +
-  xlab("Genre") + ylab("Number of Listens") + theme_minimal(base_size = 16)
+  xlab("Genre") + ylab("Number of Listens") + ylim(0,40) + theme_minimal(base_size = 16)
 
 p_max <- ggplot(master_max, aes(x=master_max$genre, y=master_max$plays)) +
   geom_bar(stat="identity", fill="red")
 
 p_max + labs(title="High Follower Preferred Genre") +
-  xlab("Genre") + ylab("Number of Listens") + theme_minimal(base_size = 16)
+  xlab("Genre") + ylab("Number of Listens") + ylim(0,40) + theme_minimal(base_size = 16)
