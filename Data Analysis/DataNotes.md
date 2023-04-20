@@ -35,6 +35,12 @@ INNER JOIN "Genre_s" Gs on "Listened_to".s_id = Gs.s_id
 INNER JOIN "Genre" G on G.g_id = Gs.g_id
 ```
 
+### Plots
+
+![2020](Photos/1_2020.png)
+![2021](Photos/1_2021.png)
+![2022](Photos/1_2022.png)
+
 ### Friend Count to Genre
 ```postgresql
 select "Follows".follows,
@@ -47,6 +53,10 @@ INNER JOIN "Listened_to" Lt on "Follows".follows = Lt.u_id
 INNER JOIN "Genre_s" Gs on Lt.s_id = Gs.s_id
 INNER JOIN "Genre" G on G.g_id = Gs.g_id
 ```
+
+### Plots
+![high](Photos/2_high_follower_preferred_genre.png)
+![low](Photos/2_low_follower_preferred_genre.png)
 
 ### Popular Artist Rating
 
@@ -69,4 +79,7 @@ from "Listened_to"
 INNER JOIN "Produces_s" Ps on "Listened_to".s_id = Ps.s_id
 INNER JOIN "Artist" A on A.ar_id = Ps.ar_id
 ```
+
+### Plot
+![lvr](Photos/3_listens_vs_rating.png)
   
