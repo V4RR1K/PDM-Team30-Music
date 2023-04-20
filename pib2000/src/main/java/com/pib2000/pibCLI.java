@@ -385,6 +385,10 @@ public class pibCLI {
                         result = Recommendation.top5GenresOfMonth();
                         System.out.println(result);
                         break;
+                    case '4':
+                        result = Recommendation.forYou(u_id);
+                        System.out.println(result);
+                        break;
                     case 'h':
                         recommendHelpMessage();
                         break;
@@ -463,6 +467,7 @@ public class pibCLI {
         System.out.println( "1 - Top 50 Songs for 30 Days\n" +
                 "2 - Top 50 Songs of your Friends\n" +
                 "3 - Top 5 Genres of the Month\n" +
+                "4 - Recommendations For You\n" +
                 "h - Help\n"+
                 "q - Quit");
     }
