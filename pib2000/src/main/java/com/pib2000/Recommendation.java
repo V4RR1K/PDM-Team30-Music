@@ -94,7 +94,99 @@ public class Recommendation {
         return sb.toString();
     }
 
+    //Roshan
+    public static String forYou(int userID) {
+        String query1 = "select distinct(a.\"Name\"), count(a.ar_id)\n" +
+                "from \"Listened_to\" lt\n" +
+                "inner join \"Produces_s\" ps\n" +
+                "on lt.s_id = ps.s_id\n" +
+                "inner join \"Artist\" a\n" +
+                "on ps.ar_id = a.ar_id\n" +
+                "where lt.u_id = " + userID + "\n" +
+                "group by a.\"Name\"\n" +
+                "order by count(a.ar_id) desc\n" +
+                "limit 1";
+
+        StringBuilder sb = new StringBuilder("(");
+        //grabbing the top artist(s) of the current user by play number
+        try (StarbugConnection conn = new StarbugConnection()) {
+            ResultSet rs = conn.doQuery(query1);
+
+            while (rs.next()) {
+                sb.append("\'");
+                sb.append(rs.getString("Name")); // artist name
+                sb.append("\',");
+            }
+
+            if (sb.length() > 1) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+        }
+        catch (Exception e) {}
+
+        sb.append(")");
+
+        String artists = sb.toString();
+        String query2 = "select distinct(u_id)\n" +
+                "from \"Listened_to\" lt\n" +
+                "inner join \"Produces_s\" ps\n" +
+                "on lt.s_id = ps.s_id\n" +
+                "inner join \"Song\" s\n" +
+                "on s.s_id = lt.s_id\n" +
+                "inner join \"Artist\" a\n" +
+                "on ps.ar_id = a.ar_id\n" +
+                "where a.\"Name\" IN " + artists + "\n" +
+                "limit 10";
+
+        StringBuilder users = new StringBuilder("(");
+        //grabbing 10 users who have played the top artist(s) of the current user
+        try (StarbugConnection conn2 = new StarbugConnection()) {
+            ResultSet rs = conn2.doQuery(query2);
+
+            while (rs.next()) {
+                users.append("\'");
+                users.append(rs.getInt("u_id")); // user id
+                users.append("\',");
+            }
+
+            if (users.length() > 1) {
+                users.deleteCharAt(users.length() - 1);
+            }
+        }
+        catch (Exception e) {}
+
+        users.append(")");
+        String query3 = "select s.\"name\" as songname, a.\"Name\" as artistname\n" +
+                "from \"Listened_to\" lt\n" +
+                "inner join \"Produces_s\" ps\n" +
+                "on lt.s_id = ps.s_id\n" +
+                "inner join \"Song\" s\n" +
+                "on s.s_id = lt.s_id\n" +
+                "inner join \"Artist\" a\n" +
+                "on ps.ar_id = a.ar_id\n" +
+                "where lt.u_id IN " + users.toString() + "\n" +
+                "group by s.\"name\", a.\"Name\"\n" +
+                "limit 10";
+
+        StringBuilder result = new StringBuilder("For You:\n");
+        try (StarbugConnection conn3 = new StarbugConnection()) {
+            ResultSet rs = conn3.doQuery(query3);
+
+            while (rs.next()) {
+                result.append("\"");
+                result.append(rs.getString("songname"));
+                result.append("\" by ");
+                result.append(rs.getString("artistname"));
+                result.append("\n");
+            }
+        }
+        catch (Exception e) {}
+
+        return result.toString();
+    }
+
     public static void main(String[] args){
-        System.out.println(top50SongsOfFriends(2));
+        //System.out.println(top50SongsOfFriends(2));
+        //System.out.println(forYou(2));
     }
 }
