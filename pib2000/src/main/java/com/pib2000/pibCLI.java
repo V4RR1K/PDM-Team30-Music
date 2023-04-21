@@ -407,10 +407,10 @@ public class pibCLI {
 
         System.out.println("Profile > ");
         // Literally print their data
-        System.out.println("\t Number of Collections:");
-        System.out.println("\t Number of Followers:");
-        System.out.println("\t Number of Following:");
-        System.out.println("\t Top 10 Artists:");
+        System.out.println("Number of Collections: " + UserProfile.numCollections(u_id));
+        System.out.println("Number of Followers: " + UserProfile.numFollowers(u_id));
+        System.out.println("Number of Following: " + UserProfile.numFollowed(u_id));
+        System.out.println("Top 10 Artists: \n" + UserProfile.topTenArtistsByPlays(u_id));
 
     }
 
