@@ -62,6 +62,7 @@ public class pibCLI {
         String username = r.readLine();
         System.out.print("Password> ");
         String password = r.readLine();
+        password = User.doHashing(password);
 
         // Query for username and password
         int loginResult = User.validateCredentials(username, password);

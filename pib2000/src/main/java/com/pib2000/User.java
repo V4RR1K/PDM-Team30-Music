@@ -1,8 +1,9 @@
 package com.pib2000;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -54,6 +55,29 @@ public class User {
         return new java.sql.Date(date);
     }
 
+    public static String doHashing(String password) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("deezwRx27463"); //salt string
+            sb.append(password);
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            md.update(sb.toString().getBytes(StandardCharsets.UTF_8));
+
+            byte[] byteArr = md.digest();
+
+            StringBuilder sb2 = new StringBuilder();
+            for (byte b : byteArr) {
+                sb2.append(String.format("%02x", b));
+            }
+
+            return sb2.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return password;
+        }
+    }
+
     private int nextId(){
         try (StarbugConnection connection = new StarbugConnection()){
             String query = "SELECT MAX(u_id) FROM \"User\"";
@@ -67,10 +91,11 @@ public class User {
             return -1;
         }
     }
+
     public User createUser(String username, String password, String firstname, String lastname, String email){
         this.id = nextId();
         this.username = username;
-        this.password = password;
+        this.password = doHashing(password);
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -105,6 +130,8 @@ public class User {
             return null;
         }
     }
+
+
 
     public User updateUser(){
         try (StarbugConnection connection = new StarbugConnection()){
