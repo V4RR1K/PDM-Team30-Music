@@ -185,8 +185,38 @@ public class Recommendation {
         return result.toString();
     }
 
-    public static void main(String[] args){
-        //System.out.println(top50SongsOfFriends(2));
-        //System.out.println(forYou(2));
+    public static void updatePasswords() {
+        for(int i = 1; i < 1007; i++){
+            StringBuilder result = new StringBuilder();
+            try (StarbugConnection conn = new StarbugConnection()) {
+                String query = "select password\n" +
+                        "from \"User\"\n" +
+                        "where u_id = " + i +"\n";
+                ResultSet rs = conn.doQuery(query);
+
+                while (rs.next()) {
+                    result.append(rs.getString("password"));
+                }
+                System.out.println(result.toString());
+            }
+            catch (Exception e) {}
+
+            String new_password = User.doHashing(result.toString());
+            System.out.println(new_password);
+            //hash
+
+            try (StarbugConnection conn = new StarbugConnection()) {
+                String query = "update \"User\"\n" +
+                        "set password = '" + new_password + "'\n" +
+                        "where u_id = " + i + ";";
+                int rs = conn.doUpdate(query);
+                System.out.println(rs);
+            }
+            catch (Exception e) {}
+        }
+    }
+
+    public static void main(String[] args) {
+        updatePasswords();
     }
 }
