@@ -23,4 +23,4 @@ Lily O'Carroll - lso2973@rit.edu
 
 # Phase 03 - Finalization of Application
 ## Due: 04/21/23
-## Grade: --/100
+## Grade: 95/100
